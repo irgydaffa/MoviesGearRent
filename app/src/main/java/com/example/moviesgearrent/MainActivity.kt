@@ -75,6 +75,7 @@ import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.frontend.CreateUser
 import com.example.moviesgearrent.frontend.Detailpage
 import com.example.moviesgearrent.frontend.EditUser
+import com.example.moviesgearrent.frontend.HomeAdmin
 import com.example.moviesgearrent.frontend.Homepage
 import com.example.moviesgearrent.frontend.StatusPage
 import com.example.moviesgearrent.respon.LoginRespon
@@ -118,6 +119,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = "homepage") {
                             Homepage(navController)
+                        }
+                        composable(route = "homeadmin"){
+                            HomeAdmin(navController)
                         }
                         composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
                             Detailpage(navController,
@@ -244,10 +248,10 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     ) {
                         if (response.isSuccessful) {
                             preferencesManager.saveData("jwt", response.body()?.jwt!!)
-                            if(response.body()?.user?.role!! == "user"){
+                            if(response.body()?.user?.roles!! == "user"){
                                 navController.navigate("Homepage")
-                            }else{
-                                navController.navigate("admin")
+                            }else if(response.body()?.user?.roles!! == "admin"){
+                                navController.navigate("HomeAdmin")
                             }
                         } else {
                             Toast.makeText(

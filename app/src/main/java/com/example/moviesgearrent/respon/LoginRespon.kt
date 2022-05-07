@@ -10,8 +10,8 @@ class LoginRespon {
 }
 
 class User{
-    @SerializedName("role")
-    var role : String = ""
+    @SerializedName("roles")
+    var roles : String = ""
 }
 
 class ApiRespon<T>{
