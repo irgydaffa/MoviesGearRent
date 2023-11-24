@@ -1,4 +1,3 @@
 package com.example.moviesgearrent.data
 
-class LoginData {
-}
+class LoginData (val identifier:String, val password: String)

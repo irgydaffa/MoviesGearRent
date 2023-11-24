@@ -1,4 +1,3 @@
 package com.example.moviesgearrent.data
 
-class UpdateData {
-}
+class UpdateData (val username:String)
