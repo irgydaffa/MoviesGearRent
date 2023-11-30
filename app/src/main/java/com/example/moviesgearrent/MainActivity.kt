@@ -11,42 +11,29 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.compose.AppTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,7 +44,6 @@ import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.Homepage
 import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.service.LoginService
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -71,6 +57,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             val sharedPreferences: SharedPreferences =
                 LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
             val navController = rememberNavController()
@@ -78,72 +65,21 @@ class MainActivity : ComponentActivity() {
             var startDestination: String
             var jwt = sharedPreferences.getString("jwt", "")
             if (jwt.equals("")) {
-                startDestination = "greeting"
+                startDestination = "login"
             } else {
                 startDestination = "pagetwo"
             }
-//            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-//            val scope = rememberCoroutineScope()
-//            ModalNavigationDrawer(
-//                drawerState = drawerState,
-//                drawerContent = {
-//                    ModalDrawerSheet {
-//                        Text("Sewa Camera", modifier = Modifier.padding(16.dp))
-//                        Divider()
-//                        NavigationDrawerItem(
-//                            label = { Text(text = "Add User") },
-//                            selected = false,
-//                            onClick = {
-//                                navController.navigate("createuserpage")
-//                                scope.launch {
-//                                    drawerState.close()
-//                                }
-//
-//                            }
-//                        )
-//                        // ...other drawer items
-//                    }
-//                }
-//            )
-//            {
-//                Scaffold(
-//                    topBar = {
-//                        TopAppBar(
-//                            title = { Text(text = "Sewa Camera") },
-//                            navigationIcon = {
-//                                IconButton(onClick = {
-//                                    scope.launch {
-//                                        drawerState.apply {
-//                                            if (isClosed) open() else close()
-//                                        }
-//                                    }
-//                                }) {
-//                                    Icon(imageVector = Icons.Outlined.Menu, contentDescription = "")
-//                                }
-//                            }
-//                        )
-//                    },
-//                    floatingActionButton = {
-//                        ExtendedFloatingActionButton(
-//                            text = { Text("Show drawer") },
-//                            icon = { Icon(Icons.Filled.Add, contentDescription = "") },
-//                            onClick = {
-//                                scope.launch {
-//                                    drawerState.apply {
-//                                        if (isClosed) open() else close()
-//                                    }
-//                                }
-//                            }
-//                        )
-//                    }
-//                ) { contentPadding ->
+            AppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     NavHost(
-                        navController,
+                        navController = navController,  
                         startDestination = startDestination,
-//                        modifier = Modifier.padding(contentPadding)
                     ) {
-                        composable(route = "greeting") {
-                            Greeting(navController)
+                        composable(route = "login") {
+                            Login(navController)
                         }
                         composable(route = "pagetwo") {
                             Homepage(navController)
@@ -154,22 +90,23 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "edituser/{userid}/{username}",
                         ) { backStackEntry ->
-
                             EditUser(
                                 navController,
                                 backStackEntry.arguments?.getString("userid"),
                                 backStackEntry.arguments?.getString("username")
                             )
                         }
-//                    }
-//                }
-//            }
+                    }
+                }
+
+            }
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Greeting(navController: NavController, context: Context = LocalContext.current) {
+fun Login(navController: NavController, context: Context = LocalContext.current) {
 
     val preferencesManager = remember { PreferencesManager(context = context) }
     var username by remember { mutableStateOf(TextFieldValue("")) }
@@ -188,11 +125,6 @@ fun Greeting(navController: NavController, context: Context = LocalContext.curre
                 ),
             )
         },
-//        floatingActionButton = {
-//            FloatingActionButton(onClick = { /*TODO*/ }) {
-//                Icon(Icons.Default.Add, contentDescription = "Add")
-//            }
-//        },
         bottomBar = {
             BottomAppBar {
                 Text(
@@ -231,32 +163,33 @@ fun Greeting(navController: NavController, context: Context = LocalContext.curre
                         call: Call<LoginRespon>,
                         response: Response<LoginRespon>
                     ) {
-                        print(response.code())
-                        if (response.code() == 200) {
-                            jwt = response.body()?.jwt!!
-                            preferencesManager.saveData("jwt", jwt)
+                        if (response.isSuccessful) {
+                            preferencesManager.saveData("jwt", response.body()?.jwt!!)
                             navController.navigate("pagetwo")
-                        } else if (response.code() == 400) {
-                            print("error login")
-                            var toast = Toast.makeText(
+                        } else {
+                            Toast.makeText(
                                 context,
-                                "Username atau password salah",
+                                "Invalid email or password",
                                 Toast.LENGTH_SHORT
                             ).show()
-
                         }
                     }
 
                     override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
-                        print(t.message)
+                        Toast.makeText(
+                            context,
+                            "Error: ${t.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
 
-                })
-            }) {
+                }
+                )
+            }
+            ) {
                 Text(text = "Login")
             }
             Text(text = jwt)
         }
     }
-}
 }

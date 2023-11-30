@@ -39,6 +39,7 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
     val preferencesManager = remember { PreferencesManager(context = context) }
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
+    var confirmpassword by remember { mutableStateOf((TextFieldValue("")))}
     var email by remember { mutableStateOf(TextFieldValue("")) }
     Scaffold (
         topBar = {
