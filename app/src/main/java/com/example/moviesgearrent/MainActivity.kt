@@ -8,10 +8,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +35,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import com.example.compose.AppTheme
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -75,7 +88,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NavHost(
-                        navController = navController,  
+                        navController = navController,
                         startDestination = startDestination,
                     ) {
                         composable(route = "login") {
@@ -115,81 +128,75 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     var jwt by remember { mutableStateOf("") }
 
     jwt = preferencesManager.getData("jwt")
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Login") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-            )
-        },
-        bottomBar = {
-            BottomAppBar {
-                Text(
-                    text = "QRis",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(value = username, onValueChange = { newText ->
-                username = newText
-            }, label = { Text("Username") })
-            OutlinedTextField(value = password, onValueChange = { newText ->
-                password = newText
-            }, label = { Text("Password") },
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-            )
-            ElevatedButton(onClick = {
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(LoginService::class.java)
-                val call = retrofit.getData(LoginData(username.text, password.text))
-                call.enqueue(object : Callback<LoginRespon> {
-                    override fun onResponse(
-                        call: Call<LoginRespon>,
-                        response: Response<LoginRespon>
-                    ) {
-                        if (response.isSuccessful) {
-                            preferencesManager.saveData("jwt", response.body()?.jwt!!)
-                            navController.navigate("pagetwo")
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Invalid email or password",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        OutlinedTextField(value = username, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
+            username = newText
+        }, label = { Text("Username") })
+        OutlinedTextField(value = password, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
+            password = newText
+        }, label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+        Spacer(
+            modifier = Modifier.height(5.dp)
+        )
+        Row {
+            Text(text = "Belum Punya Akun?", fontSize = 12.sp)
+            Spacer(modifier = Modifier.padding(10.dp, 30.dp))
+            ClickableText(text = AnnotatedString("Register"),
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    color = Color.Red
+                ), onClick = { navController.navigate("createuser") })
 
-                    override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
+        }
+        Button(onClick = {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(LoginService::class.java)
+            val call = retrofit.getData(LoginData(username.text, password.text))
+            call.enqueue(object : Callback<LoginRespon> {
+                override fun onResponse(
+                    call: Call<LoginRespon>,
+                    response: Response<LoginRespon>
+                ) {
+                    if (response.isSuccessful) {
+                        preferencesManager.saveData("jwt", response.body()?.jwt!!)
+                        navController.navigate("pagetwo")
+                    } else {
                         Toast.makeText(
                             context,
-                            "Error: ${t.message}",
-                            Toast.LENGTH_LONG
+                            "Invalid email or password",
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
-
                 }
-                )
+
+                override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
+                    Toast.makeText(
+                        context,
+                        "Error: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
             }
-            ) {
-                Text(text = "Login")
-            }
-            Text(text = jwt)
+            )
         }
+        ) {
+//            Spacer(modifier = Modifier.padding(35.dp, 5.dp))
+            Text(text = "Login")
+
+        }
+
     }
 }
+

@@ -80,7 +80,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate("createuserpage")
+                navController.navigate("createuser")
             }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
