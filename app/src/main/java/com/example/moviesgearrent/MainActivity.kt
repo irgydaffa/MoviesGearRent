@@ -165,7 +165,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
         )
         Row {
             Text(text = "Belum Punya Akun?", fontSize = 12.sp)
-            Spacer(modifier = Modifier.padding(10.dp, 30.dp))
+            Spacer(modifier = Modifier.padding(1.dp, 30.dp))
             ClickableText(text = AnnotatedString("Register"),
                 style = TextStyle(
                     fontSize = 12.sp,
@@ -212,15 +212,14 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 )
             }
             ) {
-                Spacer(modifier = Modifier.padding(35.dp, 5.dp))
                 Text(
                     text = "LOGIN",
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontWeight = FontWeight(600),
                         color = Color.White,
-
-                        )
+                        ),
+                    modifier = Modifier.padding(horizontal = 50.dp, vertical = 8.dp)
                 )
             }
         }
