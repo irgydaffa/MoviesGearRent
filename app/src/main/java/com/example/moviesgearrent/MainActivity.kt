@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +17,8 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialogDefaults.shape
@@ -39,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import com.example.compose.AppTheme
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -128,6 +134,15 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     var jwt by remember { mutableStateOf("") }
 
     jwt = preferencesManager.getData("jwt")
+    Column {
+            Image(
+                painter = painterResource(id = R.drawable.mgrlogo),
+                contentDescription = "Logo MGR",
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -194,6 +209,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
         ) {
 //            Spacer(modifier = Modifier.padding(35.dp, 5.dp))
             Text(text = "Login")
+
+
+)
 
         }
 
