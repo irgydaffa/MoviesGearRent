@@ -8,13 +8,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialogDefaults.shape
@@ -43,6 +48,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -130,6 +136,15 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     var jwt by remember { mutableStateOf("") }
 
     jwt = preferencesManager.getData("jwt")
+    Column {
+            Image(
+                painter = painterResource(id = R.drawable.mgrlogo),
+                contentDescription = "Logo MGR",
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -150,7 +165,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
         )
         Row {
             Text(text = "Belum Punya Akun?", fontSize = 12.sp)
-            Spacer(modifier = Modifier.padding(10.dp, 30.dp))
+            Spacer(modifier = Modifier.padding(1.dp, 30.dp))
             ClickableText(text = AnnotatedString("Register"),
                 style = TextStyle(
                     fontSize = 12.sp,
@@ -158,45 +173,55 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 ), onClick = { navController.navigate("createuser") })
 
         }
-        Button(onClick = {
-            val retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(LoginService::class.java)
-            val call = retrofit.getData(LoginData(username.text, password.text))
-            call.enqueue(object : Callback<LoginRespon> {
-                override fun onResponse(
-                    call: Call<LoginRespon>,
-                    response: Response<LoginRespon>
-                ) {
-                    if (response.isSuccessful) {
-                        preferencesManager.saveData("jwt", response.body()?.jwt!!)
-                        navController.navigate("pagetwo")
-                    } else {
+        Column(modifier = Modifier
+            .align(Alignment.CenterHorizontally)) {
+
+            Button(onClick = {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(LoginService::class.java)
+                val call = retrofit.getData(LoginData(username.text, password.text))
+                call.enqueue(object : Callback<LoginRespon> {
+                    override fun onResponse(
+                        call: Call<LoginRespon>,
+                        response: Response<LoginRespon>
+                    ) {
+                        if (response.isSuccessful) {
+                            preferencesManager.saveData("jwt", response.body()?.jwt!!)
+                            navController.navigate("pagetwo")
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Invalid email or password",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
                         Toast.makeText(
                             context,
-                            "Invalid email or password",
-                            Toast.LENGTH_SHORT
+                            "Error: ${t.message}",
+                            Toast.LENGTH_LONG
                         ).show()
                     }
-                }
 
-                override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
-                    Toast.makeText(
-                        context,
-                        "Error: ${t.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
-
+                )
             }
-            )
-        }
-        ) {
-//            Spacer(modifier = Modifier.padding(35.dp, 5.dp))
-            Text(text = "Login")
-
+            ) {
+                Text(
+                    text = "LOGIN",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight(600),
+                        color = Color.White,
+                        ),
+                    modifier = Modifier.padding(horizontal = 50.dp, vertical = 8.dp)
+                )
+            }
         }
 
     }
