@@ -1,7 +1,15 @@
 package com.example.moviesgearrent.service
 
-import retrofit2.http.POST
+import com.example.moviesgearrent.respon.ApiRespon
+import com.example.moviesgearrent.respon.ProdukRespon
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-interface HomeData {
-    @POST
+interface HomeService {
+    @GET("produks")
+    fun getData(
+     @Query("populate") populate: String = "*",
+     @Query("sort") sort: String = "createdAt:asc"
+    ): Call<ApiRespon<List<ProdukRespon>>>
 }

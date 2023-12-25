@@ -8,9 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -52,6 +58,14 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Button(onClick = { navController.navigate("login") })
+        {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Account",
+                modifier = Modifier.size(50.dp)
+            )
+        }
         OutlinedTextField(value = username, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
             username = newText
         }, label = { Text("Username") })

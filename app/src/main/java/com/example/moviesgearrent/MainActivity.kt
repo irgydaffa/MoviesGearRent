@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
             if (jwt.equals("")) {
                 startDestination = "login"
             } else {
-                startDestination = "pagetwo"
+                startDestination = "homepage"
             }
             AppTheme {
                 Surface(
@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = "login") {
                             Login(navController)
                         }
-                        composable(route = "pagetwo") {
+                        composable(route = "homepage") {
                             Homepage(navController)
                         }
                         composable(route = "createuser") {

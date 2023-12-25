@@ -6,3 +6,8 @@ class LoginRespon {
     @SerializedName("jwt")
     var jwt : String = ""
 }
+
+class ApiRespon<T>{
+    @SerializedName("data")
+    var data : T? = null
+}
