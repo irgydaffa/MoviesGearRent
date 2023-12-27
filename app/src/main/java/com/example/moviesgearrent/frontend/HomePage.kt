@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -144,8 +145,10 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
         bottomBar = {
             BottomAppBar {
                 Row(
+
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable(onClick = { navController.navigate("DetailPage") }),
                     horizontalArrangement = Arrangement.SpaceAround
 
                 ) {
@@ -265,6 +268,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .clip(RoundedCornerShape(30.dp))
                             .shadow(7.dp)
                             .padding(10.dp)
+                            .clickable(onClick = {navController.navigate ("DetailPage/{id}")})
                     ) {
                         Column(
                             modifier = Modifier
@@ -274,7 +278,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             verticalArrangement = Arrangement.Center
                         ) {
                             Image(
-                                painter = painterResource(id = listProduk[index].attribute?.foto_produk.toString()),
+                                painter = painterResource(id = R.drawable.ic_launcher_background),
                                 contentDescription = "Produk",
                                 modifier = Modifier
                                     .size(110.dp)

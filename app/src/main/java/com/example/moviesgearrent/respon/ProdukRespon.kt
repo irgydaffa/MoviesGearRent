@@ -16,8 +16,8 @@ class ProdukAttribute {
     var desc_produk: String? = null
     @SerializedName("nama_produk")
     var nama_produk: String? = null
-    @SerializedName("foto_produk")
-    var foto_produk: String? = null
+//    @SerializedName("foto_produk")
+//    var foto_produk: String? = null
     @SerializedName("status")
     var status : String? = null
     @SerializedName("created_at")

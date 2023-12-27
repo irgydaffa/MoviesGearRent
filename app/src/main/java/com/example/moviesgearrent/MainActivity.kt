@@ -61,6 +61,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.frontend.CreateUser
+import com.example.moviesgearrent.frontend.Detailpage
 import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.Homepage
 import com.example.moviesgearrent.respon.LoginRespon
@@ -105,6 +106,12 @@ class MainActivity : ComponentActivity() {
                         composable(route = "homepage") {
                             Homepage(navController)
                         }
+                        composable(route = "DetailPage/{id}") {
+                            Detailpage(
+                                navController,
+                                id = it.arguments?.getString("id"),
+                            )
+                        }
                         composable(route = "createuser") {
                             CreateUser(navController)
                         }
@@ -137,26 +144,33 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
 
     jwt = preferencesManager.getData("jwt")
     Column {
-            Image(
-                painter = painterResource(id = R.drawable.mgrlogo),
-                contentDescription = "Logo MGR",
-                modifier = Modifier
-                    .size(200.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.mgrlogo),
+            contentDescription = "Logo MGR",
+            modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        OutlinedTextField(value = username, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
-            username = newText
-        }, label = { Text("Username") })
-        OutlinedTextField(value = password, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
-            password = newText
-        }, label = { Text("Password") },
+        OutlinedTextField(
+            value = username,
+            shape = RoundedCornerShape(30.dp),
+            onValueChange = { newText ->
+                username = newText
+            },
+            label = { Text("Username") })
+        OutlinedTextField(value = password,
+            shape = RoundedCornerShape(30.dp),
+            onValueChange = { newText ->
+                password = newText
+            },
+            label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
@@ -173,8 +187,10 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 ), onClick = { navController.navigate("createuser") })
 
         }
-        Column(modifier = Modifier
-            .align(Alignment.CenterHorizontally)) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        ) {
 
             Button(onClick = {
                 val retrofit = Retrofit.Builder()
@@ -218,7 +234,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         fontSize = 12.sp,
                         fontWeight = FontWeight(600),
                         color = Color.White,
-                        ),
+                    ),
                     modifier = Modifier.padding(horizontal = 50.dp, vertical = 8.dp)
                 )
             }
