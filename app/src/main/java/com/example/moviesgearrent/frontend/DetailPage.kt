@@ -81,7 +81,7 @@ fun Detailpage(
             } else if (response.code() == 400) {
                 print("error login")
                 Toast.makeText(
-                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                    context, "salah ya bang", Toast.LENGTH_SHORT
                 ).show()
             }
         }

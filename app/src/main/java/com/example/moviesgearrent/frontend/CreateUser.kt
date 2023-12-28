@@ -2,13 +2,16 @@ package com.example.moviesgearrent.frontend
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -17,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -30,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -52,30 +57,55 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var confirmpassword by remember { mutableStateOf((TextFieldValue(""))) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
+    Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Top) {
+        IconButton(
+            modifier = Modifier
+                .padding(top = 25.dp, start = 21.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(10.dp)
+                ),
+            onClick = { navController.navigate("login") }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Account",
+                modifier = Modifier.size(25.dp),
+                tint = Color.White
+            )
+        }
+
+    }
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { navController.navigate("login") })
-        {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Account",
-                modifier = Modifier.size(50.dp)
-            )
-        }
-        OutlinedTextField(value = username, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
-            username = newText
-        }, label = { Text("Username") })
-        OutlinedTextField(value = email, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
-            email = newText
-        }, label = { Text("Email") })
-        OutlinedTextField(value = password, shape = RoundedCornerShape(30.dp), onValueChange = { newText ->
-            password = newText
-        }, label = { Text("Password") })
-        ElevatedButton(onClick = {
+        OutlinedTextField(
+            value = username,
+            shape = RoundedCornerShape(30.dp),
+            onValueChange = { newText ->
+                username = newText
+            },
+            label = { Text("Username") })
+        OutlinedTextField(
+            value = email,
+            shape = RoundedCornerShape(30.dp),
+            onValueChange = { newText ->
+                email = newText
+            },
+            label = { Text("Email") })
+        OutlinedTextField(
+            value = password,
+            shape = RoundedCornerShape(30.dp),
+            onValueChange = { newText ->
+                password = newText
+            },
+            label = { Text("Password") })
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+        ElevatedButton(modifier = Modifier.width(280.dp),onClick = {
             var baseUrl = "http://10.0.2.2:1337/api/"
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -95,7 +125,7 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
                         print(response.raw())
                         var toast = Toast.makeText(
                             context,
-                            response.message(),
+                            "salah",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -107,9 +137,7 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
 
             })
         }) {
-            Spacer(modifier = Modifier.height(10.dp))
             Text("Register")
         }
-
     }
 }

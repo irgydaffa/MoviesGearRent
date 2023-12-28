@@ -313,11 +313,11 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .clip(RoundedCornerShape(30.dp))
                             .shadow(7.dp)
                             .padding(10.dp)
-<<<<<<< HEAD
+
                             .clickable(onClick = {navController.navigate ("DetailPage/$id")})
-=======
+
                             .clickable(onClick = { navController.navigate("DetailPage/{id}") })
->>>>>>> e76ec795af6f1f18025651bb03ce2a3d30520c8a
+
                     ) {
                         Column(
                             modifier = Modifier
