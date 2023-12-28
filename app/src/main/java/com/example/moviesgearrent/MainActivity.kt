@@ -22,11 +22,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -52,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -141,6 +146,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var baseUrl = "http://10.0.2.2:1337/api/"
     var jwt by remember { mutableStateOf("") }
+    val eyeOpen = painterResource(id = R.drawable.visible)
+    val eyeClose = painterResource(id = R.drawable.hidden)
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     jwt = preferencesManager.getData("jwt")
     Column {
@@ -165,14 +173,27 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 username = newText
             },
             label = { Text("Username") })
-        OutlinedTextField(value = password,
+        OutlinedTextField(
+            value = password,
             shape = RoundedCornerShape(30.dp),
             onValueChange = { newText ->
                 password = newText
             },
             label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            visualTransformation =
+            if (passwordVisibility) VisualTransformation.None
+            else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            trailingIcon = {
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                    val icon = if (passwordVisibility) eyeOpen else eyeClose
+                    Image(
+                        painter = icon,
+                        contentDescription = if (passwordVisibility) "Hide Password" else "Show Password",
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+            }
         )
         Spacer(
             modifier = Modifier.height(5.dp)
@@ -210,7 +231,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         } else {
                             Toast.makeText(
                                 context,
-                                "Invalid email or password",
+                                "salah ya bang",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -219,7 +240,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
                         Toast.makeText(
                             context,
-                            "Error: ${t.message}",
+                            "Error: salah ya bang",
                             Toast.LENGTH_LONG
                         ).show()
                     }
