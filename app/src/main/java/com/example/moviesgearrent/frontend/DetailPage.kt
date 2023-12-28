@@ -90,7 +90,7 @@ fun Detailpage(
             print(t.message)
         }
     })
-<<<<<<< HEAD
+
 //    Text(text = listProduk.value.attribute?.nama_produk!!)
 //    Log.d("test data", listProduk.attribute?.nama_produk.toString())
     Column {
@@ -99,10 +99,5 @@ fun Detailpage(
         Text(text = status.value)
     }
 
-//    Text(text = harga.value)
-=======
-    Log.d("detail", listProduk.value.id.toString())
 
-
->>>>>>> e76ec795af6f1f18025651bb03ce2a3d30520c8a
 }
