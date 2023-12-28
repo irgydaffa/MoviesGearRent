@@ -134,7 +134,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
             TopAppBar(
                 modifier = Modifier
                     .height(150.dp)
-                    .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)),
+                    .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)),
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.primaryContainer,
@@ -205,6 +205,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             Icon(
                                 Icons.Outlined.History,
                                 contentDescription = "Account",
+
 
                                 modifier = Modifier.size(30.dp)
 

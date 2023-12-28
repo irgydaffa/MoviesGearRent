@@ -52,5 +52,6 @@ fun Detailpage(
         }
     })
     Log.d("detail", listProduk.value.id.toString())
-    scaffold
+
+
 }
