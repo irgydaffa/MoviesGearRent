@@ -2,6 +2,7 @@ package com.example.moviesgearrent.frontend
 
 import android.content.ClipData.Item
 import android.content.Context
+import android.graphics.Paint.Style
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -141,6 +142,13 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 ),
                 title = { Text(text = "Homepage") },
             )
+            Text(
+                text = "Sahitya Disini")
+
+            
+
+
+
         },
         bottomBar = {
             BottomAppBar {
@@ -269,7 +277,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .clip(RoundedCornerShape(30.dp))
                             .shadow(7.dp)
                             .padding(10.dp)
-                            .clickable(onClick = {navController.navigate ("DetailPage/{id}")})
+                            .clickable(onClick = { navController.navigate("DetailPage/{id}") })
                     ) {
                         Column(
                             modifier = Modifier
