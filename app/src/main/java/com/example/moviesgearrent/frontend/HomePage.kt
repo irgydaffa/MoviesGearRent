@@ -187,7 +187,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
 
                             )
                             Text(
-                                text = "Tambah",
+                                text = "Notifikasi",
                                 style = TextStyle(
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight(600),
