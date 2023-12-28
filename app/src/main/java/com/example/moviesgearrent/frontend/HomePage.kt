@@ -1,60 +1,59 @@
 package com.example.moviesgearrent.frontend
 
-import android.content.ClipData.Item
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.History
-import androidx.compose.material3.AlertDialogDefaults.containerColor
-import androidx.compose.material3.AlertDialogDefaults.titleContentColor
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.WhitePoint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -62,9 +61,7 @@ import com.example.moviesgearrent.PreferencesManager
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
-import com.example.moviesgearrent.respon.UserRespon
 import com.example.moviesgearrent.service.HomeService
-import com.example.moviesgearrent.service.UserService
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -76,6 +73,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun Homepage(navController: NavController, context: Context = LocalContext.current) {
     val listProduk = remember { mutableStateListOf<ProdukRespon>() }
+    var searchfield by remember { mutableStateOf(TextFieldValue("")) }
+
     val preferencesManager = remember { PreferencesManager(context) }
     var baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit = Retrofit.Builder()
@@ -131,16 +130,61 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
 
     Scaffold(
         topBar = {
+            var searchLabel by remember {
+                mutableStateOf("Search")
+            }
             TopAppBar(
                 modifier = Modifier
-                    .height(150.dp)
-                    .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)),
+                    .height(160.dp)
+                    .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)),
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.primaryContainer,
                 ),
                 title = { Text(text = "Homepage") },
             )
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.End) {
+
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Account",
+                    modifier= Modifier.size(45.dp),
+                    tint = Color.White
+
+                )
+
+
+            }
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 40.dp, end = 40.dp, top = 75.dp)
+                ,
+
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally) {
+
+                OutlinedTextField(
+                    value = searchfield,
+                    shape = RoundedCornerShape(30.dp),
+                    modifier = Modifier.width(500.dp),
+                    onValueChange = { newText ->
+                        searchfield = newText
+                    },
+                    label = { Text(searchLabel, color = Color.White)},
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.White,
+                        unfocusedBorderColor = Color.White
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.Search,"Search", tint = Color.White)
+                    },
+                )
+            }
         },
         bottomBar = {
             BottomAppBar {
@@ -157,12 +201,12 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             navController.navigate("homepage")
                         }
                     ) {
-                        Column {
+                        Column (horizontalAlignment =Alignment.CenterHorizontally){
                             Icon(
                                 imageVector = Icons.Default.Home,
                                 contentDescription = "Add",
-
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(30.dp),
+                                tint = MaterialTheme.colorScheme.primary
 
                             )
                             Text(
@@ -170,7 +214,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 style = TextStyle(
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight(600),
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             )
                         }
@@ -178,12 +222,12 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                     IconButton(
                         onClick = { navController.navigate("login") }
                     ) {
-                        Column {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
                                 contentDescription = "Notifications",
-
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(30.dp),
+                                tint = MaterialTheme.colorScheme.primary
 
                             )
                             Text(
@@ -191,7 +235,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 style = TextStyle(
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight(600),
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             )
                         }
@@ -205,8 +249,8 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             Icon(
                                 Icons.Outlined.History,
                                 contentDescription = "Account",
-
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(30.dp),
+                                tint = MaterialTheme.colorScheme.primary
 
                             )
                             Text(
@@ -214,7 +258,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 style = TextStyle(
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight(600),
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             )
                         }
@@ -224,12 +268,12 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
 
                     )
                     {
-                        Column {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 imageVector = Icons.Default.AccountCircle,
                                 contentDescription = "Account",
-
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(30.dp),
+                                tint = MaterialTheme.colorScheme.primary
 
                             )
                             Text(
@@ -237,7 +281,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 style = TextStyle(
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight(600),
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             )
                         }
@@ -269,7 +313,11 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .clip(RoundedCornerShape(30.dp))
                             .shadow(7.dp)
                             .padding(10.dp)
+<<<<<<< HEAD
                             .clickable(onClick = {navController.navigate ("DetailPage/$id")})
+=======
+                            .clickable(onClick = { navController.navigate("DetailPage/{id}") })
+>>>>>>> e76ec795af6f1f18025651bb03ce2a3d30520c8a
                     ) {
                         Column(
                             modifier = Modifier
@@ -312,5 +360,4 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
 
     }
 }
-
 
