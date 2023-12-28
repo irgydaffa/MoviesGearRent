@@ -313,9 +313,13 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .clip(RoundedCornerShape(30.dp))
                             .shadow(7.dp)
                             .padding(10.dp)
+<<<<<<< Updated upstream
 
                             .clickable(onClick = {navController.navigate ("DetailPage/$id")})
 
+=======
+                            .clickable(onClick = {navController.navigate ("DetailPage/$id")})
+>>>>>>> Stashed changes
                             .clickable(onClick = { navController.navigate("DetailPage/{id}") })
 
                     ) {

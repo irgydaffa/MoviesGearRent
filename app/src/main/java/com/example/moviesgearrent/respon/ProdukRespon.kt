@@ -25,7 +25,7 @@ class ProdukAttribute {
     @SerializedName("updated_at")
     var updated_at : String? = ""
     @SerializedName("harga")
-    var harga : Integer? = null
+    var harga : Int? = null
     @SerializedName("deleted_at")
     var users_permission_user: UserRespon = UserRespon()
 }

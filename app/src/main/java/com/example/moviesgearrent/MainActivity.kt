@@ -69,6 +69,7 @@ import com.example.moviesgearrent.frontend.CreateUser
 import com.example.moviesgearrent.frontend.Detailpage
 import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.Homepage
+import com.example.moviesgearrent.frontend.StatusPage
 import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.service.LoginService
 import retrofit2.Call
@@ -119,6 +120,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = "createuser") {
                             CreateUser(navController)
+                        }
+                        composable(route = "StatusPage") {
+                            StatusPage(
+                                navController,
+                                id = it.arguments?.getString("id"),
+                            )
                         }
                         composable(
                             route = "edituser/{userid}/{username}",

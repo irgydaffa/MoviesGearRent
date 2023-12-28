@@ -59,7 +59,7 @@ fun Detailpage(
                 nama_produk.value = resp?.attribute?.nama_produk!!
                 desc_produk.value = resp?.attribute?.desc_produk!!
                 status.value = resp?.attribute?.status!!
-//                harga.value = resp?.attribute?.harga!!
+                harga.value = resp?.attribute?.harga!!
 //                Log.d("test data", listProduk.attribute?.nama_produk.toString())
 //                val resp = response.body()?.data
 //                resp?.let { listProduk ->
@@ -97,6 +97,7 @@ fun Detailpage(
         Text(text = nama_produk.value)
         Text(text = desc_produk.value)
         Text(text = status.value)
+        Text(text = harga.value.toString())
     }
 
 
