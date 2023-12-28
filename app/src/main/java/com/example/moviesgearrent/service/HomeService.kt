@@ -1,8 +1,10 @@
 package com.example.moviesgearrent.service
 
+import com.example.moviesgearrent.data.StatusData
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -26,6 +28,6 @@ interface HomeService {
     @PUT("produks/{id}")
     fun UpdateStatus(
         @Path("id") id: String,
-        @Query("status") status: String
+        @Body status: StatusData
     ): Call<ApiRespon<ProdukRespon>>
 }

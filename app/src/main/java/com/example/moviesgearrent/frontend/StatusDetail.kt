@@ -1,7 +1,6 @@
 package com.example.moviesgearrent.frontend
 
 import android.content.Context
-import android.widget.Button
 import android.widget.Toast
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -10,13 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.data.StatusData
 import com.example.moviesgearrent.respon.ApiRespon
-import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import com.example.moviesgearrent.service.HomeService
-import com.example.moviesgearrent.service.LoginService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun StatusPage(navController: NavController, id: String?, context: Context = LocalContext.current) {
+fun StatusDetail(navController: NavController, id: String?, context: Context = LocalContext.current){
     val baseUrl = "http://10.0.2.2:1337/api/"
     val listProduk = remember { mutableStateOf(ProdukRespon()) }
     val nama_produk = remember { mutableStateOf("") }
@@ -65,5 +61,37 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
             print(t.message)
         }
     })
+    
+    Button(onClick = {
+        val retrofit2 = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(HomeService::class.java)
+        val call2 = retrofit.UpdateStatus(id!!, StatusData(status.value))
+        call2.enqueue(
+            object : Callback<ApiRespon<ProdukRespon>> {
+                override fun onResponse(
+                    call: Call<ApiRespon<ProdukRespon>>,
+                    response: Response<ApiRespon<ProdukRespon>>
+                ) {
+                    if (response.code() == 200) {
+                        navController.navigate("detailpage/$id")
+                    } else if (response.code() == 400) {
+                        print("error login")
+                        Toast.makeText(
+                            context, "Username atau password salah", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
 
+                override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
+                    print(t.message)
+                }
+            }
+        )
+
+    }){
+        Text ("Ubah Status")
+    }
 }
