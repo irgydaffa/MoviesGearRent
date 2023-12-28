@@ -13,17 +13,17 @@ class ProdukRespon {
 
 class ProdukAttribute {
     @SerializedName("desc_produk")
-    var desc_produk: String? = null
+    var desc_produk: String? = ""
     @SerializedName("nama_produk")
-    var nama_produk: String? = null
+    var nama_produk: String? = ""
 //    @SerializedName("foto_produk")
 //    var foto_produk: String? = null
     @SerializedName("status")
-    var status : String? = null
+    var status : String? = ""
     @SerializedName("created_at")
-    var created_at : String? = null
+    var created_at : String? = ""
     @SerializedName("updated_at")
-    var updated_at : String? = null
+    var updated_at : String? = ""
     @SerializedName("harga")
     var harga : Integer? = null
     @SerializedName("deleted_at")

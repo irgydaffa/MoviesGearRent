@@ -18,6 +18,7 @@ interface HomeService {
     fun getDetailData(
         @Path("id") id: String,
         @Query("populate") populate: String = "*",
-        @Query("sort") sort: String = "createdAt:asc"
+        @Query("sort") sort: String = "createdAt:asc",
+//        @Query("filters")
     ): Call<ApiRespon<ProdukRespon>>
 }

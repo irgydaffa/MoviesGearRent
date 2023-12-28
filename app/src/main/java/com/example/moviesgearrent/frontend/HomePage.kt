@@ -261,6 +261,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(listProduk.size) { index ->
+                    val id = listProduk[index].id
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -268,7 +269,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .clip(RoundedCornerShape(30.dp))
                             .shadow(7.dp)
                             .padding(10.dp)
-                            .clickable(onClick = {navController.navigate ("DetailPage/{id}")})
+                            .clickable(onClick = {navController.navigate ("DetailPage/$id")})
                     ) {
                         Column(
                             modifier = Modifier
