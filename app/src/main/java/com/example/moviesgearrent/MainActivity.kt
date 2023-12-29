@@ -23,6 +23,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTimeFilled
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddAlert
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.BottomAppBar
@@ -32,6 +36,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -47,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.compose.AppTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -66,9 +73,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.frontend.CreateUser
-import com.example.moviesgearrent.frontend.Detailpage
+import com.example.moviesgearrent.frontend.DetailPage
 import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.Homepage
+import com.example.moviesgearrent.frontend.PageSewa
 import com.example.moviesgearrent.frontend.StatusPage
 import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.service.LoginService
@@ -112,10 +120,12 @@ class MainActivity : ComponentActivity() {
                         composable(route = "homepage") {
                             Homepage(navController)
                         }
-                        composable(route = "DetailPage/{id}") {
-                            Detailpage(
-                                navController,
-                                id = it.arguments?.getString("id"),
+                        composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}") { backStackEntry ->
+                            DetailPage(navController,
+                                backStackEntry.arguments?.getString("produklId"),
+                                backStackEntry.arguments?.getString("nama_produk"),
+                                backStackEntry.arguments?.getString("desc_produk"),
+                                backStackEntry.arguments?.getString("harga"),
                             )
                         }
                         composable(route = "createuser") {
@@ -135,6 +145,9 @@ class MainActivity : ComponentActivity() {
                                 backStackEntry.arguments?.getString("userid"),
                                 backStackEntry.arguments?.getString("username")
                             )
+                        }
+                        composable(route = "pagesewa") {
+                            PageSewa(navController)
                         }
                     }
                 }
@@ -271,3 +284,39 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     }
 }
 
+@Composable
+fun BottomNavigation(navController: NavController) {
+    NavigationBar {
+        val bottomNavigation = listOf(
+            BottomNavItem(
+                label = "Home",
+                icon = Icons.Default.Home,
+                route = "homepage"
+            ),
+            BottomNavItem(
+                label = "Notifikasi",
+                icon = Icons.Default.AddAlert,
+                route = ""
+            ),
+            BottomNavItem(
+                label = "History",
+                icon = Icons.Default.AccessTimeFilled,
+                route = ""
+            ),
+            BottomNavItem(
+                label = "Profile",
+                icon = Icons.Default.AccountCircle,
+                route = ""
+            )
+        )
+        bottomNavigation.map {
+            NavigationBarItem(
+                selected = navController.currentDestination?.route == it.route,
+                onClick = { navController.navigate(it.route) },
+                icon = { Icon(imageVector = it.icon, contentDescription = it.label, tint = MaterialTheme.colorScheme.primary) },
+                label = {Text(text = it.label)},
+            )
+        }
+    }
+}
+data class BottomNavItem(val label: String, val icon: ImageVector, val route: String)
