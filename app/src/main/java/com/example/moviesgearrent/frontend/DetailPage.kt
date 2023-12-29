@@ -67,7 +67,7 @@ fun Detailpage(
                 }
             } else if (response.code() == 400) {
                 print("error login")
-                
+
                 Toast.makeText(
                     context, "salah ya bang", Toast.LENGTH_SHORT
                 ).show()
@@ -99,7 +99,7 @@ fun Detailpage(
                 ) {
 
                     if (response.code() == 200) {
-                        navController.navigate("HomePage")
+                        navController.navigate("PageSewa/$id")
                     } else if (response.code() == 400) {
                         print("error login")
                         Toast.makeText(
