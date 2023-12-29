@@ -57,6 +57,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moviesgearrent.BottomNavigation
 import com.example.moviesgearrent.PreferencesManager
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.respon.ApiRespon
@@ -135,7 +136,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
             }
             TopAppBar(
                 modifier = Modifier
-                    .height(160.dp)
+                    .height(170.dp)
                     .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)),
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -143,6 +144,16 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 ),
                 title = { Text(text = "Homepage") },
             )
+
+
+            Text(text = "SahityaDisini",
+                modifier= Modifier
+                    .padding(30.dp)
+                    .size(150.dp),
+                    color = Color.White
+
+            )
+
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
@@ -188,106 +199,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
         },
         bottomBar = {
             BottomAppBar {
-                Row(
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = { navController.navigate("DetailPage") }),
-                    horizontalArrangement = Arrangement.SpaceAround
-
-                ) {
-                    IconButton(
-                        onClick = {
-                            navController.navigate("homepage")
-                        }
-                    ) {
-                        Column (horizontalAlignment =Alignment.CenterHorizontally){
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = "Add",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary
-
-                            )
-                            Text(
-                                text = "Beranda",
-                                style = TextStyle(
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = { navController.navigate("StatusPage") }
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Notifications,
-                                contentDescription = "Notifications",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary
-
-                            )
-                            Text(
-                                text = "Notifikasi",
-                                style = TextStyle(
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = { navController.navigate("createuser") }
-
-                    )
-                    {
-                        Column {
-                            Icon(
-                                Icons.Outlined.History,
-                                contentDescription = "Account",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary
-
-                            )
-                            Text(
-                                text = "History",
-                                style = TextStyle(
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = { navController.navigate("createuser") }
-
-                    )
-                    {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.AccountCircle,
-                                contentDescription = "Account",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary
-
-                            )
-                            Text(
-                                text = "Profil",
-                                style = TextStyle(
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
-                    }
-
-                }
+                BottomNavigation(navController)
             }
         }
 
@@ -309,16 +221,16 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedCornerShape(30.dp))
-                            .shadow(7.dp)
+                            .clip(RoundedCornerShape(15.dp))
+                            .shadow(2.dp)
                             .padding(10.dp)
-                            .clickable(onClick = {navController.navigate ("DetailPage/$id")})
+                            .clickable(onClick = { navController.navigate("DetailPage/$id") })
                     ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(10.dp),
+                                .padding(10.dp)
+                                .clickable { navController.navigate("detailpage/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga) },
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
@@ -326,7 +238,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 painter = painterResource(id = R.drawable.ic_launcher_background),
                                 contentDescription = "Produk",
                                 modifier = Modifier
-                                    .size(110.dp)
+                                    .size(150.dp)
                                     .align(Alignment.CenterHorizontally)
                             )
                             Text(
@@ -334,7 +246,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight(600),
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             )
                             Text(
