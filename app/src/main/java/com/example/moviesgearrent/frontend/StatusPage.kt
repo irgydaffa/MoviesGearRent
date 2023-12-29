@@ -52,6 +52,8 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
                     status.value = "Sedang Disewa"
                 } else if (resp?.attribute?.status == "selesai") {
                     status.value = "Selesai"
+                } else if (resp?.attribute?.status == "pending") {
+                    status.value = "Pending"
                 }
             } else if (response.code() == 400) {
                 print("error login")
