@@ -73,10 +73,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.frontend.CreateUser
-import com.example.moviesgearrent.frontend.DetailPage
+import com.example.moviesgearrent.frontend.Detailpage
 import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.Homepage
-import com.example.moviesgearrent.frontend.PageSewa
 import com.example.moviesgearrent.frontend.StatusPage
 import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.service.LoginService
@@ -103,7 +102,7 @@ class MainActivity : ComponentActivity() {
             if (jwt.equals("")) {
                 startDestination = "login"
             } else {
-                startDestination = "homepage"
+                startDestination = "StatusPage"
             }
             AppTheme {
                 Surface(
@@ -120,12 +119,13 @@ class MainActivity : ComponentActivity() {
                         composable(route = "homepage") {
                             Homepage(navController)
                         }
-                        composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}") { backStackEntry ->
-                            DetailPage(navController,
+                        composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
+                            Detailpage(navController,
                                 backStackEntry.arguments?.getString("produklId"),
                                 backStackEntry.arguments?.getString("nama_produk"),
                                 backStackEntry.arguments?.getString("desc_produk"),
                                 backStackEntry.arguments?.getString("harga"),
+                                backStackEntry.arguments?.getString("status")
                             )
                         }
                         composable(route = "createuser") {
@@ -145,9 +145,6 @@ class MainActivity : ComponentActivity() {
                                 backStackEntry.arguments?.getString("userid"),
                                 backStackEntry.arguments?.getString("username")
                             )
-                        }
-                        composable(route = "pagesewa") {
-                            PageSewa(navController)
                         }
                     }
                 }
