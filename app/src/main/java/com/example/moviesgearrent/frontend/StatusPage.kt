@@ -137,21 +137,29 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
 
 
     ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
             Box {
                 Column(
-                    modifier = Modifier.shadow(elevation = 5.5.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
-
-                .width(322.dp)
-                .height(64.dp)
-                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 3.dp))
-
+                    Modifier
+                        .shadow(elevation = 5.5.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
+                        .width(322.dp)
+                        .height(64.dp)
+                        .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 3.dp))
+                )
                 {
-                    Text(text = nama_produk.value,
+                    Text(text = "nama_produk.value",
                         fontSize = 30.sp,
                         modifier = Modifier
                             .padding(bottom = 10.dp,top =10.dp))
 
-                    Text(text = harga.value.toString(),
+                    Text(text = "harga.value.toString()",
                         fontSize = 30.sp,
                         modifier = Modifier
                             .padding(bottom = 5.dp, top = 10.dp))
