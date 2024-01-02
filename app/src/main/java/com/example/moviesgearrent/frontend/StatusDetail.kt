@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +37,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavController
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.data.StatusData
@@ -53,9 +57,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun StatusDetail (navController: NavController, id: String?, context: Context = LocalContext.current) {
     val baseUrl = "http://10.0.2.2:1337/api/"
+    var search by remember { mutableStateOf(TextFieldValue(""))}
     val listProduk = remember { mutableStateOf(ProdukRespon()) }
     val nama_produk = remember { mutableStateOf("") }
     val desc_produk = remember { mutableStateOf("") }
+
     val status = remember { mutableStateOf("") }
     val harga = remember { mutableStateOf(0) }
     val retrofit =
