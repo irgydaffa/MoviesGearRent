@@ -1,6 +1,7 @@
 package com.example.moviesgearrent.service
 
 import com.example.moviesgearrent.data.StatusData
+import com.example.moviesgearrent.data.StatusDataWrapper
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import retrofit2.Call
@@ -28,6 +29,6 @@ interface HomeService {
     @PUT("produks/{id}")
     fun UpdateStatus(
         @Path("id") id: String,
-        @Body status: StatusData
+        @Body status: StatusDataWrapper
     ): Call<ApiRespon<ProdukRespon>>
 }

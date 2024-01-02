@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
             if (jwt.equals("")) {
                 startDestination = "login"
             } else {
-                startDestination = "StatusPage"
+                startDestination = "homepage"
             }
             AppTheme {
                 Surface(
@@ -244,7 +244,11 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     ) {
                         if (response.isSuccessful) {
                             preferencesManager.saveData("jwt", response.body()?.jwt!!)
-                            navController.navigate("pagetwo")
+                            if(response.body()?.user?.role!! == "user"){
+                                navController.navigate("Homepage")
+                            }else{
+                                navController.navigate("admin")
+                            }
                         } else {
                             Toast.makeText(
                                 context,

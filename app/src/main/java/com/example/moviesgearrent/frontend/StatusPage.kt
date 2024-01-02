@@ -54,6 +54,7 @@ import com.example.moviesgearrent.BottomNavigation
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.data.StatusData
+import com.example.moviesgearrent.data.StatusDataWrapper
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.respon.ProdukRespon
@@ -75,42 +76,42 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
     val desc_produk = remember { mutableStateOf("") }
     val status = remember { mutableStateOf("") }
     val harga = remember { mutableStateOf(0) }
-//     val retrofit =
-//        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-//            .build().create(HomeService::class.java)
-//    val call = retrofit.getDetailData(id!!)
-//    call.enqueue(object : Callback<ApiRespon<ProdukRespon>> {
-//        override fun onResponse(
-//            call: Call<ApiRespon<ProdukRespon>>,
-//            response: Response<ApiRespon<ProdukRespon>>
-//        ) {
-//            if (response.code() == 200) {
-//                val resp = response.body()?.data
-//                nama_produk.value = resp?.attribute?.nama_produk!!
-//                desc_produk.value = resp?.attribute?.desc_produk!!
-//                status.value = resp?.attribute?.status!!
-//                harga.value = resp?.attribute?.harga!!
-//                if (resp?.attribute?.status == "tersedia") {
-//                    status.value = "Tersedia"
-//                } else if (resp?.attribute?.status == "disewa") {
-//                    status.value = "Sedang Disewa"
-//                } else if (resp?.attribute?.status == "selesai") {
-//                    status.value = "Selesai"
-//                } else if (resp?.attribute?.status == "pending") {
-//                    status.value = "Pending"
-//                }
-//            } else if (response.code() == 400) {
-//                print("error login")
-//                Toast.makeText(
-//                    context, "Username atau password salah", Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
-//            print(t.message)
-//        }
-//    })
+     val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(HomeService::class.java)
+    val call = retrofit.getDetailData(id!!)
+    call.enqueue(object : Callback<ApiRespon<ProdukRespon>> {
+        override fun onResponse(
+            call: Call<ApiRespon<ProdukRespon>>,
+            response: Response<ApiRespon<ProdukRespon>>
+        ) {
+            if (response.code() == 200) {
+                val resp = response.body()?.data
+                nama_produk.value = resp?.attribute?.nama_produk!!
+                desc_produk.value = resp?.attribute?.desc_produk!!
+                status.value = resp?.attribute?.status!!
+                harga.value = resp?.attribute?.harga!!
+                if (resp?.attribute?.status == "tersedia") {
+                    status.value = "Tersedia"
+                } else if (resp?.attribute?.status == "disewa") {
+                    status.value = "Sedang Disewa"
+                } else if (resp?.attribute?.status == "selesai") {
+                    status.value = "Selesai"
+                } else if (resp?.attribute?.status == "pending") {
+                    status.value = "Pending"
+                }
+            } else if (response.code() == 400) {
+                print("error login")
+                Toast.makeText(
+                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
+            print(t.message)
+        }
+    })
 
     Scaffold(
         topBar = {
@@ -154,12 +155,12 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
                         .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 3.dp))
                 )
                 {
-                    Text(text = "nama_produk.value",
+                    Text(text = nama_produk.value,
                         fontSize = 30.sp,
                         modifier = Modifier
                             .padding(bottom = 10.dp,top =10.dp))
 
-                    Text(text = "harga.value.toString()",
+                    Text(text = harga.value.toString(),
                         fontSize = 30.sp,
                         modifier = Modifier
                             .padding(bottom = 5.dp, top = 10.dp))
@@ -179,7 +180,7 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
                         .create(HomeService::class.java)
-                    val call2 = retrofit2.UpdateStatus(id!!, StatusData(status.value))
+                    val call2 = retrofit2.UpdateStatus(id!!, StatusDataWrapper(StatusData(status.value)))
                     call2.enqueue(
                         object : Callback<ApiRespon<ProdukRespon>> {
                             override fun onResponse(

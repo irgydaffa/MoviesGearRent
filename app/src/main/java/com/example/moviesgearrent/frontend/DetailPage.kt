@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import com.example.moviesgearrent.data.StatusDataWrapper
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -67,6 +68,7 @@ fun Detailpage(
     val desc_produk = remember { mutableStateOf(desc ?: "") }
     val status = remember { mutableStateOf(status ?: "") }
     val harga = remember { mutableStateOf(harga ?: "") }
+
     val baseUrl = "http://10.0.2.2:1337/api/"
 
     Scaffold(
@@ -82,7 +84,9 @@ fun Detailpage(
                             )
                         }
                         Text(
-                            text = "Detail Produk", fontWeight = FontWeight.Medium, fontSize = 25.sp,
+                            text = "Detail Produk",
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 25.sp,
                         )
                     }
                 }, colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -125,45 +129,53 @@ fun Detailpage(
                             color = Color(0xFFFFFFFF),
                             shape = RoundedCornerShape(size = 12.dp)
 
-                        ))
+                        )
+                )
 
 
                 {
-                    Text(text = nama_produk.value,
+                    Text(
+                        text = nama_produk.value,
                         fontSize = 30.sp,
                         modifier = Modifier
-                            .padding(bottom = 10.dp,top =10.dp))
+                            .padding(bottom = 10.dp, top = 10.dp)
+                    )
 
-                    Text(text = harga.value,
+                    Text(
+                        text = harga.value,
                         fontSize = 30.sp,
                         modifier = Modifier
-                            .padding(bottom = 5.dp, top = 10.dp))
+                            .padding(bottom = 5.dp, top = 10.dp)
+                    )
 
-                    Text(text = desc_produk.value,
+                    Text(
+                        text = desc_produk.value,
                         fontSize = 14.sp,
                         modifier = Modifier
-                            .padding(bottom = 10.dp,top = 15.dp))
+                            .padding(bottom = 10.dp, top = 15.dp)
+                    )
 
-                    }
                 }
+            }
 
-            if(status.value.equals("tersedia")) {
+            if (status.value.equals("tersedia")) {
                 Button(onClick = {
                     val retrofit2 = Retrofit.Builder()
                         .baseUrl(baseUrl)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
                         .create(HomeService::class.java)
-                    val call2 = retrofit2.UpdateStatus(id!!, StatusData(status.value))
+                    val call2 = retrofit2.UpdateStatus(id!!, StatusDataWrapper(StatusData(status.value)))
                     call2.enqueue(
                         object : Callback<ApiRespon<ProdukRespon>> {
+
                             override fun onResponse(
                                 call: Call<ApiRespon<ProdukRespon>>,
                                 response: Response<ApiRespon<ProdukRespon>>
                             ) {
 
-                                if (response.code() == 200) {
-                                    navController.navigate("PageSewa/$id")
+                                if (response.isSuccessful) {
+                                    navController.navigate("HomePage")
                                 } else if (response.code() == 400) {
                                     print("error login")
                                     Toast.makeText(
@@ -173,7 +185,10 @@ fun Detailpage(
                             }
 
 
-                            override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
+                            override fun onFailure(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                t: Throwable
+                            ) {
                                 print(t.message)
                             }
                         }
@@ -183,11 +198,11 @@ fun Detailpage(
                 ) {
                     Text("Sewa")
                 }
-            } else if(status.value.equals("disewa")) {
+            } else if (status.value.equals("disewa")) {
                 Text(text = "Sedang disewa")
-            } else if(status.value.equals("selesai")) {
+            } else if (status.value.equals("selesai")) {
                 Text(text = "Belum tersedia")
             }
         }
-        }
     }
+}

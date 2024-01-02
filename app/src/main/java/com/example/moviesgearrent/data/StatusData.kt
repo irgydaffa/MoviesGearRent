@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 class StatusDataWrapper (
     @SerializedName("data")
-        var statusdata : StatusData
+        var statusData: StatusData
 )
 
 class StatusData(
-    var status: String
+    val status: String
 )

@@ -57,7 +57,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+//import coil.compose.AsyncImage
 import com.example.moviesgearrent.BottomNavigation
 import com.example.moviesgearrent.PreferencesManager
 import com.example.moviesgearrent.R
@@ -271,13 +271,13 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
     }
 }
 
-@Composable
-fun DisplayImageFromUrl(imageUrl: String) {
-    val Url = "http://10.0.2.2:1337/api/"+imageUrl
-    AsyncImage(
-        model = Url,
-        placeholder = painterResource(id = R.drawable.tokoimg),
-        error = painterResource(id = R.drawable.ic_launcher_background),
-        contentDescription = "Test"
-    )
-}
+//@Composable
+//fun DisplayImageFromUrl(imageUrl: String) {
+//    val Url = "http://10.0.2.2:1337/api/"+imageUrl
+//    AsyncImage(
+//        model = Url,
+//        placeholder = painterResource(id = R.drawable.tokoimg),
+//        error = painterResource(id = R.drawable.ic_launcher_background),
+//        contentDescription = "Test"
+//    )
+//}

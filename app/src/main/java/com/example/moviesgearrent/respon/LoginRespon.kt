@@ -5,6 +5,13 @@ import com.google.gson.annotations.SerializedName
 class LoginRespon {
     @SerializedName("jwt")
     var jwt : String = ""
+    @SerializedName("user")
+    var user : User = User()
+}
+
+class User{
+    @SerializedName("role")
+    var role : String = ""
 }
 
 class ApiRespon<T>{
