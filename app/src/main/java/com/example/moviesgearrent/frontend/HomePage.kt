@@ -22,11 +22,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -75,8 +78,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun Homepage(navController: NavController, context: Context = LocalContext.current) {
     val listProduk = remember { mutableStateListOf<ProdukRespon>() }
-    var searchfield by remember { mutableStateOf(TextFieldValue("")) }
-
+    var search by remember { mutableStateOf(TextFieldValue("")) }
+    val baseColor = Color(0xFF00687A)
     val preferencesManager = remember { PreferencesManager(context) }
     var baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit = Retrofit.Builder()
@@ -84,7 +87,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HomeService::class.java)
-    val call = retrofit.getData()
+    val call = retrofit.getData(search.text ,"*", )
     call.enqueue(
         object : Callback<ApiRespon<List<ProdukRespon>>> {
             override fun onResponse(
@@ -131,73 +134,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
     )
 
     Scaffold(
-        topBar = {
-            var searchLabel by remember {
-                mutableStateOf("Search")
-            }
-            TopAppBar(
-                modifier = Modifier
-                    .height(170.dp)
-                    .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)),
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.primaryContainer,
-                ),
-                title = { Text(text = "Homepage") },
-            )
 
-
-            Text(text = "SahityaDisini",
-                modifier= Modifier
-                    .padding(30.dp)
-                    .size(150.dp),
-                    color = Color.White
-
-            )
-
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End) {
-
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Account",
-                    modifier= Modifier.size(45.dp),
-                    tint = Color.White
-
-                )
-
-
-            }
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 40.dp, end = 40.dp, top = 75.dp)
-                ,
-
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-
-                OutlinedTextField(
-                    value = searchfield,
-                    shape = RoundedCornerShape(30.dp),
-                    modifier = Modifier.width(500.dp),
-                    onValueChange = { newText ->
-                        searchfield = newText
-                    },
-                    label = { Text(searchLabel, color = Color.White)},
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.White
-                    ),
-                    leadingIcon = {
-                        Icon(Icons.Default.Search,"Search", tint = Color.White)
-                    },
-                )
-            }
-        },
         bottomBar = {
             BottomAppBar {
                 BottomNavigation(navController)
@@ -212,7 +149,41 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            OutlinedTextField(
+                value = search,
+                onValueChange = {
+                    search = it
+                },
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding( 30.dp),
+
+                trailingIcon = {
+                    IconButton(onClick = {
+                        // Handle the search action
+                    }) {
+                        Icon(
+                            Icons.Default.Search,
+                            contentDescription = "Search",
+                            tint = baseColor,
+
+                            )
+
+                    }
+                },
+                placeholder = { Text(text = "Cari", color = baseColor) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = baseColor,
+                    unfocusedBorderColor =baseColor,
+                    cursorColor = baseColor,
+                    textColor = baseColor,
+                )
+            )
             LazyVerticalGrid(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -227,6 +198,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             .padding(10.dp)
                             .clickable(onClick = { navController.navigate("DetailPage/$id") })
                     ) {
+
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -236,6 +208,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             verticalArrangement = Arrangement.Center
                         ) {
 //                            DisplayImageFromUrl(imageUrl = listProduk[index].attribute?.)
+
                             Image(
                                 painter = painterResource(id = R.drawable.ic_launcher_background),
                                 contentDescription = "Produk",
@@ -259,25 +232,42 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                     color = Color.Black
                                 )
                             )
+
+
                         }
+
+                        }
+
+                    }
+
+                }
+                listProduk.forEach { Produks ->
+                    Log.d("Produk", Produks.attribute?.nama_produk.toString())
+
                     }
                 }
+
             }
-            listProduk.forEach { Produks ->
-                Log.d("Produk", Produks.attribute?.nama_produk.toString())
-            }
+
         }
 
+    @Composable
+    fun FilledButtonExample(onClick: () -> Unit) {
+        Button(onClick = { onClick() }) {
+            Text("Filled")
+        }
     }
-}
 
-@Composable
-fun DisplayImageFromUrl(imageUrl: String) {
-    val Url = "http://10.0.2.2:1337/api/"+imageUrl
-    AsyncImage(
-        model = Url,
-        placeholder = painterResource(id = R.drawable.tokoimg),
-        error = painterResource(id = R.drawable.ic_launcher_background),
-        contentDescription = "Test"
-    )
-}
+    @Composable
+    fun DisplayImageFromUrl(imageUrl: String) {
+        val Url = "http://10.0.2.2:1337/api/" + imageUrl
+        AsyncImage(
+            model = Url,
+            placeholder = painterResource(id = R.drawable.tokoimg),
+            error = painterResource(id = R.drawable.ic_launcher_background),
+            contentDescription = "Test"
+        )
+    }
+
+
+

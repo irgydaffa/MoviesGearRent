@@ -14,6 +14,7 @@ interface HomeService {
     @GET("produks")
     fun getData(
      @Query("populate") populate: String = "*",
+    // @Query("filters[nama_produk][\$contains]") search: String?,
      @Query("sort") sort: String = "createdAt:asc"
     ): Call<ApiRespon<List<ProdukRespon>>>
 
@@ -22,7 +23,7 @@ interface HomeService {
         @Path("id") id: String,
         @Query("populate") populate: String = "*",
         @Query("sort") sort: String = "createdAt:asc",
-//        @Query("filters")
+
     ): Call<ApiRespon<ProdukRespon>>
 
     @PUT("produks/{id}")
