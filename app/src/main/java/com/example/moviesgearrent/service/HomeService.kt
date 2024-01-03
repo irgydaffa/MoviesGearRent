@@ -14,9 +14,9 @@ import retrofit2.http.Query
 interface HomeService {
     @GET("produks")
     fun getData(
-     @Query("populate") populate: String = "*",
-    // @Query("filters[nama_produk][\$contains]") search: String?,
-     @Query("sort") sort: String = "createdAt:asc"
+     @Query("populate") populate: String?,
+     @Query("filters[nama_produk][\$contains]") search: String?,
+     @Query("sort") sort: String?
     ): Call<ApiRespon<List<ProdukRespon>>>
 
     @GET("produks/{id}")

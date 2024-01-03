@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
@@ -81,13 +82,13 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
     var search by remember { mutableStateOf(TextFieldValue("")) }
     val baseColor = Color(0xFF00687A)
     val preferencesManager = remember { PreferencesManager(context) }
-    var baseUrl = "http://10.0.2.2:1337/api/"
+    var baseUrl = "http://10.217.17.11:1337/api/"
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HomeService::class.java)
-    val call = retrofit.getData(search.text ,"*", )
+    val call = retrofit.getData("*", search.text,"createdAt:asc")
     call.enqueue(
         object : Callback<ApiRespon<List<ProdukRespon>>> {
             override fun onResponse(
@@ -134,7 +135,27 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
     )
 
     Scaffold(
-
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "MoviesGearRent", modifier = Modifier.padding(top = 5.dp), fontWeight = FontWeight.Bold, fontSize = 24.sp,)
+                    IconButton(modifier = Modifier.padding(start = 320.dp), onClick = {
+                        preferencesManager.saveData("jwt", "")
+                        navController.navigate("login")
+                    }) {
+                        Icon(
+                            Icons.Default.ExitToApp,
+                            contentDescription = "Sign Out",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = baseColor,
+                    titleContentColor = Color.White,
+                ),
+            )
+        },
         bottomBar = {
             BottomAppBar {
                 BottomNavigation(navController)
@@ -207,14 +228,13 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-//                            DisplayImageFromUrl(imageUrl = listProduk[index].attribute?.)
-
                             Image(
                                 painter = painterResource(id = R.drawable.ic_launcher_background),
                                 contentDescription = "Produk",
                                 modifier = Modifier
                                     .size(150.dp)
                                     .align(Alignment.CenterHorizontally)
+                                    .background(Color.Gray) // Ganti dengan warna latar belakang sementara
                             )
                             Text(
                                 text = listProduk[index].attribute?.nama_produk.toString(),
@@ -232,11 +252,9 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                     color = Color.Black
                                 )
                             )
-
-
                         }
 
-                        }
+                    }
 
                     }
 
