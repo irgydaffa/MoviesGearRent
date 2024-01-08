@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTimeFilled
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddAlert
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialogDefaults.shape
@@ -165,7 +166,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     val preferencesManager = remember { PreferencesManager(context = context) }
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var baseUrl = "http://10.0.2.2:1337/api/"
+    var baseUrl = "http://10.217.17.11:1337/api/"
     var jwt by remember { mutableStateOf("") }
     val eyeOpen = painterResource(id = R.drawable.visible)
     val eyeClose = painterResource(id = R.drawable.hidden)
@@ -306,11 +307,6 @@ fun BottomNavigation(navController: NavController) {
             BottomNavItem(
                 label = "History",
                 icon = Icons.Default.AccessTimeFilled,
-                route = ""
-            ),
-            BottomNavItem(
-                label = "Profile",
-                icon = Icons.Default.AccountCircle,
                 route = ""
             )
         )
