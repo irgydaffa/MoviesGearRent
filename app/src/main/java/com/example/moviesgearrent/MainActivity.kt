@@ -73,6 +73,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moviesgearrent.data.LoginData
+import com.example.moviesgearrent.frontend.Addpage
 import com.example.moviesgearrent.frontend.CreateUser
 import com.example.moviesgearrent.frontend.Detailpage
 import com.example.moviesgearrent.frontend.EditUser
@@ -142,6 +143,9 @@ class MainActivity : ComponentActivity() {
                                 id = it.arguments?.getString("id"),
                             )
                         }
+                        composable(route = "adduser") {
+                            Addpage(navController)
+                        }
                         composable(
                             route = "edituser/{userid}/{username}",
                         ) { backStackEntry ->
@@ -166,7 +170,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     val preferencesManager = remember { PreferencesManager(context = context) }
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var baseUrl = "http://10.217.17.11:1337/api/"
+    var baseUrl = "http://10.0.2.2:1337/api/"
     var jwt by remember { mutableStateOf("") }
     val eyeOpen = painterResource(id = R.drawable.visible)
     val eyeClose = painterResource(id = R.drawable.hidden)

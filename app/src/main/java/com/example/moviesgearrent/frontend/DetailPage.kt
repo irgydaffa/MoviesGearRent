@@ -157,15 +157,14 @@ fun Detailpage(
 
                 }
             }
-
+            val retrofit2 = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(HomeService::class.java)
             if (status.value.equals("tersedia")) {
                 Button(onClick = {
-                    val retrofit2 = Retrofit.Builder()
-                        .baseUrl(baseUrl)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build()
-                        .create(HomeService::class.java)
-                    val call2 = retrofit2.UpdateStatus(id!!, StatusDataWrapper(StatusData(status.value)))
+                    val call2 = retrofit2.UpdateStatus(id!!, StatusDataWrapper(StatusData("pending")))
                     call2.enqueue(
                         object : Callback<ApiRespon<ProdukRespon>> {
 
@@ -173,7 +172,6 @@ fun Detailpage(
                                 call: Call<ApiRespon<ProdukRespon>>,
                                 response: Response<ApiRespon<ProdukRespon>>
                             ) {
-
                                 if (response.isSuccessful) {
                                     navController.navigate("HomePage")
                                 } else if (response.code() == 400) {
@@ -183,8 +181,6 @@ fun Detailpage(
                                     ).show()
                                 }
                             }
-
-
                             override fun onFailure(
                                 call: Call<ApiRespon<ProdukRespon>>,
                                 t: Throwable
@@ -193,7 +189,6 @@ fun Detailpage(
                             }
                         }
                     )
-
                 }
                 ) {
                     Text("Sewa")

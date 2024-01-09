@@ -30,7 +30,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -87,7 +89,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HomeService::class.java)
-    val call = retrofit.getData(search.text ,"*", )
+    val call = retrofit.getData("*",search.text, "createdAt:asc")
     call.enqueue(
         object : Callback<ApiRespon<List<ProdukRespon>>> {
             override fun onResponse(
@@ -99,7 +101,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                     listProduk.clear()
                     response.body()?.data!!.forEach { Produks ->
                         listProduk.add(Produks)
-                        Log.d("test", Produks.id.toString())
+                        Log.d("test get data", Produks.id.toString())
                     }
                 } else {
                     try {
@@ -111,6 +113,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                                 .getString("message"),
                             Toast.LENGTH_LONG
                         ).show()
+                        Log.d("error try", jObjError.getJSONObject("error").getString("message"))
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
@@ -139,7 +142,21 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
             BottomAppBar {
                 BottomNavigation(navController)
             }
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate("Addpage")
+                },
+                shape = RoundedCornerShape(50),
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = "Add",
+                    tint = Color.White
+                )
+            }
+        },
 
 
     ) { innerPadding ->
@@ -157,7 +174,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                 shape = RoundedCornerShape(30.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 30.dp),
+                    .padding(30.dp),
 
                 trailingIcon = {
                     IconButton(onClick = {

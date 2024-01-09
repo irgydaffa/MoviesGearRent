@@ -82,7 +82,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
     var search by remember { mutableStateOf(TextFieldValue("")) }
     val baseColor = Color(0xFF00687A)
     val preferencesManager = remember { PreferencesManager(context) }
-    var baseUrl = "http://10.217.17.11:1337/api/"
+    var baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
@@ -112,6 +112,8 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 .getString("message"),
                             Toast.LENGTH_LONG
                         ).show()
+                        Log.d("error respond try", jObjError.getJSONObject("error")
+                            .getString("message"))
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
