@@ -75,6 +75,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moviesgearrent.data.LoginData
 import com.example.moviesgearrent.frontend.Addpage
 import com.example.moviesgearrent.frontend.CreateUser
+import com.example.moviesgearrent.frontend.DetailAdmin
 import com.example.moviesgearrent.frontend.Detailpage
 import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.HomeAdmin
@@ -127,7 +128,16 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
                             Detailpage(navController,
-                                backStackEntry.arguments?.getString("produklId"),
+                                backStackEntry.arguments?.getString("produkId"),
+                                backStackEntry.arguments?.getString("nama_produk"),
+                                backStackEntry.arguments?.getString("desc_produk"),
+                                backStackEntry.arguments?.getString("harga"),
+                                backStackEntry.arguments?.getString("status")
+                            )
+                        }
+                        composable("detailadmin/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
+                            DetailAdmin(navController,
+                                backStackEntry.arguments?.getString("produkId"),
                                 backStackEntry.arguments?.getString("nama_produk"),
                                 backStackEntry.arguments?.getString("desc_produk"),
                                 backStackEntry.arguments?.getString("harga"),

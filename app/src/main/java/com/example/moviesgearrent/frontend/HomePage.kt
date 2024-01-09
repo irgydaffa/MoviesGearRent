@@ -247,7 +247,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 )
                             )
                             Text(
-                                text = listProduk[index].attribute?.harga.toString(),
+                                text = "Rp. " + listProduk[index].attribute?.harga.toString(),
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight(600),

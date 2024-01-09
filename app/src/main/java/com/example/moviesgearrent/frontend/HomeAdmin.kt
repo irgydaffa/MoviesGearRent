@@ -213,14 +213,14 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                             .clip(RoundedCornerShape(15.dp))
                             .shadow(2.dp)
                             .padding(10.dp)
-                            .clickable(onClick = { navController.navigate("DetailPage/$id") })
+                            .clickable(onClick = { navController.navigate("DetailAdmin/$id") })
                     ) {
 
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(10.dp)
-                                .clickable { navController.navigate("detailpage/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status) },
+                                .clickable { navController.navigate("detailadmin/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status) },
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
@@ -242,7 +242,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                                 )
                             )
                             Text(
-                                text = listProduk[index].attribute?.harga.toString(),
+                                text = "Rp. "+ listProduk[index].attribute?.harga.toString(),
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight(600),
