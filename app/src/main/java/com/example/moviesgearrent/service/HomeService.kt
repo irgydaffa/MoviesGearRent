@@ -23,9 +23,10 @@ interface HomeService {
     ): Call<ApiRespon<List<ProdukRespon>>>
     @GET("produks")
     fun getDataAdmin(
-        @Query("populate") populate: String?,
+        @Query("populate") populate: String?= "*",
         @Query("filters[nama_produk][\$contains]") search: String?,
-        @Query("sort") sort: String?,
+        @Query("sort") sort: String?="nama_produk:asc",
+        @Query("filters[status][\$eq]") status: String? = null,
 
     ): Call<ApiRespon<List<ProdukRespon>>>
 

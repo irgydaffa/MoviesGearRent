@@ -47,6 +47,7 @@ import com.example.moviesgearrent.data.StatusDataWrapper
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import com.example.moviesgearrent.service.HomeService
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,49 +56,54 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatusDetail (navController: NavController, id: String?, context: Context = LocalContext.current) {
+fun StatusDetail(
+    navController: NavController,
+    id: String?,
+    nama: String?,
+    status: String?,
+    context: Context = LocalContext.current
+) {
     val baseUrl = "http://10.0.2.2:1337/api/"
-    var search by remember { mutableStateOf(TextFieldValue(""))}
+    var search by remember { mutableStateOf(TextFieldValue("")) }
     val listProduk = remember { mutableStateOf(ProdukRespon()) }
-    val nama_produk = remember { mutableStateOf("") }
-    val desc_produk = remember { mutableStateOf("") }
+    val id_produk = remember { mutableStateOf(id ?: "0") }
+    val nama_produk = remember { mutableStateOf(nama ?: "") }
+    val status = remember { mutableStateOf(status ?: "") }
 
-    val status = remember { mutableStateOf("") }
-    val harga = remember { mutableStateOf(0) }
-    val retrofit =
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build().create(HomeService::class.java)
-    val call = retrofit.getDetailData(id!!)
-    call.enqueue(object : Callback<ApiRespon<ProdukRespon>> {
-        override fun onResponse(
-            call: Call<ApiRespon<ProdukRespon>>,
-            response: Response<ApiRespon<ProdukRespon>>
-        ) {
-            if (response.code() == 200) {
-                val resp = response.body()?.data
-                nama_produk.value = resp?.attribute?.nama_produk!!
-                desc_produk.value = resp?.attribute?.desc_produk!!
-                status.value = resp?.attribute?.status!!
-                harga.value = resp?.attribute?.harga!!
-                if (resp?.attribute?.status == "tersedia") {
-                    status.value = "Tersedia"
-                } else if (resp?.attribute?.status == "disewa") {
-                    status.value = "Sedang Disewa"
-                } else if (resp?.attribute?.status == "selesai") {
-                    status.value = "Selesai"
-                }
-            } else if (response.code() == 400) {
-                print("error login")
-                Toast.makeText(
-                    context, "Username atau password salah", Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
 
-        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
-            print(t.message)
-        }
-    })
+//    val retrofit =
+//        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+//            .build().create(HomeService::class.java)
+//    val call = retrofit.getDetailData(id!!)
+//    call.enqueue(object : Callback<ApiRespon<ProdukRespon>> {
+//        override fun onResponse(
+//            call: Call<ApiRespon<ProdukRespon>>,
+//            response: Response<ApiRespon<ProdukRespon>>
+//        ) {
+//            if (response.code() == 200) {
+//                val resp = response.body()?.data
+//                nama_produk.value = resp?.attribute?.nama_produk!!
+//                desc_produk.value = resp?.attribute?.desc_produk!!
+//                status.value = resp?.attribute?.status!!
+//                if (resp?.attribute?.status == "tersedia") {
+//                    status.value = "Tersedia"
+//                } else if (resp?.attribute?.status == "disewa") {
+//                    status.value = "Sedang Disewa"
+//                } else if (resp?.attribute?.status == "selesai") {
+//                    status.value = "Selesai"
+//                }
+//            } else if (response.code() == 400) {
+//                print("error login")
+//                Toast.makeText(
+//                    context, "Username atau password salah", Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//
+//        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
+//            print(t.message)
+//        }
+//    })
 
     Scaffold(
         topBar = {
@@ -112,7 +118,7 @@ fun StatusDetail (navController: NavController, id: String?, context: Context = 
                             )
                         }
                         Text(
-                            text = "Detail Produk",
+                            text = "Detail Status",
                             fontWeight = FontWeight.Medium,
                             fontSize = 25.sp,
                         )
@@ -168,22 +174,14 @@ fun StatusDetail (navController: NavController, id: String?, context: Context = 
                         modifier = Modifier
                             .padding(bottom = 10.dp, top = 10.dp)
                     )
-
+//                    Text(
+//                        text = harga.value.toString(),
+//                        fontSize = 14.sp,
+//                        modifier = Modifier
+//                            .padding(bottom = 10.dp, top = 15.dp)
+//                    )
                     Text(
-                        text = harga.value.toString(),
-                        fontSize = 30.sp,
-                        modifier = Modifier
-                            .padding(bottom = 5.dp, top = 10.dp)
-                    )
-
-                    Text(
-                        text = desc_produk.value,
-                        fontSize = 14.sp,
-                        modifier = Modifier
-                            .padding(bottom = 10.dp, top = 15.dp)
-                    )
-
-                    Text(text = status.value,
+                        text = status.value,
                         fontSize = 14.sp,
                         modifier = Modifier
                             .padding(bottom = 10.dp, top = 15.dp)
@@ -191,37 +189,151 @@ fun StatusDetail (navController: NavController, id: String?, context: Context = 
 
                 }
             }
-            Button(onClick = {
-                val retrofit2 = Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(HomeService::class.java)
-                val call2 = retrofit2.UpdateStatus(id!!, StatusDataWrapper(StatusData(status.value)))
-                call2.enqueue(
-                    object : Callback<ApiRespon<ProdukRespon>> {
-                        override fun onResponse(
-                            call: Call<ApiRespon<ProdukRespon>>,
-                            response: Response<ApiRespon<ProdukRespon>>
-                        ) {
-                            if (response.code() == 200) {
-                                navController.navigate("HomePage")
-                            } else if (response.code() == 400) {
-                                print("error login")
-                                Toast.makeText(
-                                    context, "Username atau password salah", Toast.LENGTH_SHORT
-                                ).show()
+            val retrofit2 = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(HomeService::class.java)
+            val data = StatusData("dipinjam")
+            if (status.value.equals("pending")) {
+                Button(onClick = {
+                    val call2 = retrofit2.UpdateStatus(id_produk.value, StatusDataWrapper(data))
+                    call2.enqueue(
+                        object : Callback<ApiRespon<ProdukRespon>> {
+
+                            override fun onResponse(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                response: Response<ApiRespon<ProdukRespon>>
+                            ) {
+                                if (response.isSuccessful) {
+                                    navController.navigate("statuspage")
+                                } else if (response.code() == 400) {
+                                    try {
+                                        val jObjError = JSONObject(response.errorBody()!!.string())
+                                        Toast.makeText(
+                                            context,
+                                            jObjError.getJSONObject("error").getString("message"),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } catch (e: Exception) {
+                                        Toast.makeText(
+                                            context,
+                                            e.message,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                t: Throwable
+                            ) {
+                                print(t.message)
                             }
                         }
+                    )
+                }
+                ) {
+                    Text("Ubah Status")
+                }
+            }
+            val retrofit3 = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(HomeService::class.java)
+            val data2 = StatusData("selesai")
+            if (status.value.equals("disewa")) {
+                Button(onClick = {
+                    val call2 = retrofit3.UpdateStatus(id_produk.value, StatusDataWrapper(data2))
+                    call2.enqueue(
+                        object : Callback<ApiRespon<ProdukRespon>> {
 
-                        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
-                            print(t.message)
+                            override fun onResponse(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                response: Response<ApiRespon<ProdukRespon>>
+                            ) {
+                                if (response.isSuccessful) {
+                                    navController.navigate("statuspage")
+                                } else if (response.code() == 400) {
+                                    try {
+                                        val jObjError = JSONObject(response.errorBody()!!.string())
+                                        Toast.makeText(
+                                            context,
+                                            jObjError.getJSONObject("error").getString("message"),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } catch (e: Exception) {
+                                        Toast.makeText(
+                                            context,
+                                            e.message,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                t: Throwable
+                            ) {
+                                print(t.message)
+                            }
                         }
-                    }
-                )
+                    )
+                }
+                ) {
+                    Text("Ubah Status")
+                }
+            }
+            val retrofit4 = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(HomeService::class.java)
+            val data3 = StatusData("tersedia")
+            if (status.value.equals("selesai")) {
+                Button(onClick = {
+                    val call2 = retrofit4.UpdateStatus(id_produk.value, StatusDataWrapper(data3))
+                    call2.enqueue(
+                        object : Callback<ApiRespon<ProdukRespon>> {
 
-            }) {
-                Text("Ubah Status")
+                            override fun onResponse(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                response: Response<ApiRespon<ProdukRespon>>
+                            ) {
+                                if (response.isSuccessful) {
+                                    navController.navigate("statuspage")
+                                } else if (response.code() == 400) {
+                                    try {
+                                        val jObjError = JSONObject(response.errorBody()!!.string())
+                                        Toast.makeText(
+                                            context,
+                                            jObjError.getJSONObject("error").getString("message"),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } catch (e: Exception) {
+                                        Toast.makeText(
+                                            context,
+                                            e.message,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<ApiRespon<ProdukRespon>>,
+                                t: Throwable
+                            ) {
+                                print(t.message)
+                            }
+                        }
+                    )
+                }) {
+                    Text("Ubah Status")
+                }
             }
         }
     }

@@ -79,10 +79,14 @@ import com.example.moviesgearrent.frontend.Addpage
 import com.example.moviesgearrent.frontend.CreateUser
 import com.example.moviesgearrent.frontend.DetailAdmin
 import com.example.moviesgearrent.frontend.Detailpage
+import com.example.moviesgearrent.frontend.DipinjamPage
 import com.example.moviesgearrent.frontend.EditUser
 import com.example.moviesgearrent.frontend.HomeAdmin
 import com.example.moviesgearrent.frontend.Homepage
+import com.example.moviesgearrent.frontend.SelesaiPage
+import com.example.moviesgearrent.frontend.StatusDetail
 import com.example.moviesgearrent.frontend.StatusPage
+import com.example.moviesgearrent.frontend.TersediaPage
 import com.example.moviesgearrent.respon.LoginRespon
 import com.example.moviesgearrent.service.LoginService
 import retrofit2.Call
@@ -146,10 +150,18 @@ class MainActivity : ComponentActivity() {
                         composable(route = "createuser") {
                             CreateUser(navController)
                         }
-                        composable(route = "StatusPage") {
+                        composable(route = "statuspage") {
                             StatusPage(
                                 navController,
                                 id = it.arguments?.getString("id"),
+                            )
+                        }
+                        composable("statusdetail/{produkId}/{nama_produk}/{status}") { backStackEntry ->
+                            StatusDetail(
+                                navController,
+                                backStackEntry.arguments?.getString("produkId"),
+                                backStackEntry.arguments?.getString("nama_produk"),
+                                backStackEntry.arguments?.getString("status"),
                             )
                         }
                         composable(route = "addpage") {
@@ -164,193 +176,222 @@ class MainActivity : ComponentActivity() {
                                 backStackEntry.arguments?.getString("username")
                             )
                         }
+                        composable(route = "dipinjam") {
+                            DipinjamPage(
+                                navController,
+                                id = it.arguments?.getString("id"),
+                            )
+                        }
+                        composable(route = "selesai") {
+                            SelesaiPage(
+                                navController,
+                                id = it.arguments?.getString("id"),
+                            )
+                        }
+                        composable(route = "tersedia"){
+                            TersediaPage(
+                                navController,
+                                id = it.arguments?.getString("id"),
+                            )
+                        }
                     }
-                }
 
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Login(navController: NavController, context: Context = LocalContext.current) {
 
-    val preferencesManager = remember { PreferencesManager(context = context) }
-    var username by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
-    val baseUrl = "http://10.0.2.2:1337/api/"
-    var jwt by remember { mutableStateOf("") }
-    val eyeOpen = painterResource(id = R.drawable.visible)
-    val eyeClose = painterResource(id = R.drawable.hidden)
-    var passwordVisibility by remember { mutableStateOf(false) }
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun Login(navController: NavController, context: Context = LocalContext.current) {
 
-    jwt = preferencesManager.getData("jwt")
-    Column {
-        Image(
-            painter = painterResource(id = R.drawable.mgrlogo),
-            contentDescription = "Logo MGR",
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-    }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        OutlinedTextField(value = username,
-            shape = RoundedCornerShape(30.dp),
-            onValueChange = { newText ->
-                username = newText
-            },
-            label = { Text("Username") })
-        OutlinedTextField(value = password,
-            shape = RoundedCornerShape(30.dp),
-            onValueChange = { newText ->
-                password = newText
-            },
-            label = { Text("Password") },
-            visualTransformation = if (passwordVisibility) VisualTransformation.None
-            else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            trailingIcon = {
-                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                    val icon = if (passwordVisibility) eyeOpen else eyeClose
-                    Image(
-                        painter = icon,
-                        contentDescription = if (passwordVisibility) "Hide Password" else "Show Password",
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
-            })
-        Spacer(
-            modifier = Modifier.height(5.dp)
-        )
-        Row {
-            Text(text = "Belum Punya Akun?", fontSize = 12.sp)
-            Spacer(modifier = Modifier.padding(1.dp, 30.dp))
-            ClickableText(text = AnnotatedString("Register"), style = TextStyle(
-                fontSize = 12.sp, color = Color.Red
-            ), onClick = { navController.navigate("createuser") })
+        val preferencesManager = remember { PreferencesManager(context = context) }
+        var username by remember { mutableStateOf(TextFieldValue("")) }
+        var password by remember { mutableStateOf(TextFieldValue("")) }
+        val baseUrl = "http://10.0.2.2:1337/api/"
+        var jwt by remember { mutableStateOf("") }
+        val eyeOpen = painterResource(id = R.drawable.visible)
+        val eyeClose = painterResource(id = R.drawable.hidden)
+        var passwordVisibility by remember { mutableStateOf(false) }
 
+        jwt = preferencesManager.getData("jwt")
+        Column {
+            Image(
+                painter = painterResource(id = R.drawable.mgrlogo),
+                contentDescription = "Logo MGR",
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
         }
         Column(
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
+            OutlinedTextField(value = username,
+                shape = RoundedCornerShape(30.dp),
+                onValueChange = { newText ->
+                    username = newText
+                },
+                label = { Text("Username") })
+            OutlinedTextField(value = password,
+                shape = RoundedCornerShape(30.dp),
+                onValueChange = { newText ->
+                    password = newText
+                },
+                label = { Text("Password") },
+                visualTransformation = if (passwordVisibility) VisualTransformation.None
+                else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        val icon = if (passwordVisibility) eyeOpen else eyeClose
+                        Image(
+                            painter = icon,
+                            contentDescription = if (passwordVisibility) "Hide Password" else "Show Password",
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                })
+            Spacer(
+                modifier = Modifier.height(5.dp)
+            )
+            Row {
+                Text(text = "Belum Punya Akun?", fontSize = 12.sp)
+                Spacer(modifier = Modifier.padding(1.dp, 30.dp))
+                ClickableText(text = AnnotatedString("Register"), style = TextStyle(
+                    fontSize = 12.sp, color = Color.Red
+                ), onClick = { navController.navigate("createuser") })
 
-            Button(onClick = {
-                Log.d("xyz", "")
-                val retrofit = Retrofit.Builder().baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(LoginService::class.java)
-                val call = retrofit.getData(LoginData(username.text, password.text))
-                call.enqueue(object : Callback<LoginRespon> {
-                    override fun onResponse(
-                        call: Call<LoginRespon>,
-                        response: Response<LoginRespon>,
-                    ) {
-                        if (response.isSuccessful) {
-                            preferencesManager.saveData("jwt", response.body()?.jwt!!)
-                            if (response.body()?.user?.roles!! == "user") {
-                                navController.navigate("Homepage")
-                            } else if (response.body()?.user?.roles!! == "admin") {
-                                navController.navigate("HomeAdmin")
+            }
+            Column(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+
+                Button(onClick = {
+                    Log.d("xyz", "")
+                    val retrofit = Retrofit.Builder().baseUrl(baseUrl)
+                        .addConverterFactory(GsonConverterFactory.create()).build()
+                        .create(LoginService::class.java)
+                    val call = retrofit.getData(LoginData(username.text, password.text))
+                    call.enqueue(object : Callback<LoginRespon> {
+                        override fun onResponse(
+                            call: Call<LoginRespon>,
+                            response: Response<LoginRespon>,
+                        ) {
+                            if (response.isSuccessful) {
+                                preferencesManager.saveData("jwt", response.body()?.jwt!!)
+                                if (response.body()?.user?.roles!! == "user") {
+                                    navController.navigate("Homepage")
+                                } else if (response.body()?.user?.roles!! == "admin") {
+                                    navController.navigate("HomeAdmin")
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context, "salah ya bang", Toast.LENGTH_SHORT
+                                ).show()
                             }
-                        } else {
+                        }
+
+                        override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
                             Toast.makeText(
-                                context, "salah ya bang", Toast.LENGTH_SHORT
+                                context, "Error: salah ya bang", Toast.LENGTH_LONG
                             ).show()
                         }
-                    }
 
-                    override fun onFailure(call: Call<LoginRespon>, t: Throwable) {
-                        Toast.makeText(
-                            context, "Error: salah ya bang", Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    })
+                }) {
+                    Text(
+                        text = "LOGIN", style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(600),
+                            color = Color.White,
+                        ), modifier = Modifier.padding(horizontal = 50.dp, vertical = 8.dp)
+                    )
+                }
+            }
+        }
+    }
 
-                })
-            }) {
-                Text(
-                    text = "LOGIN", style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight(600),
-                        color = Color.White,
-                    ), modifier = Modifier.padding(horizontal = 50.dp, vertical = 8.dp)
+    @Composable
+    fun BottomNavigation(navController: NavController, context: Context = LocalContext.current) {
+
+
+        NavigationBar {
+            val bottomNavigation = listOf(
+                BottomNavItem(
+                    label = "Home", icon = Icons.Default.Home, route = "homepage"
+                ), BottomNavItem(
+                    label = "Notifikasi", icon = Icons.Default.AddAlert, route = ""
+                ), BottomNavItem(
+                    label = "History", icon = Icons.Default.AccessTimeFilled, route = ""
+                )
+            )
+            bottomNavigation.map {
+                NavigationBarItem(
+                    selected = navController.currentDestination?.route == it.route,
+                    onClick = { navController.navigate(it.route) },
+                    icon = {
+                        Icon(
+                            imageVector = it.icon,
+                            contentDescription = it.label,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    },
+                    label = { Text(text = it.label) },
                 )
             }
         }
     }
-}
 
-@Composable
-fun BottomNavigation(navController: NavController, context: Context = LocalContext.current) {
+    @Composable
+    fun BottomNavigationAdmin(
+        navController: NavController,
+        context: Context = LocalContext.current
+    ) {
 
 
-    NavigationBar {
-        val bottomNavigation = listOf(
-            BottomNavItem(
-                label = "Home", icon = Icons.Default.Home, route = "homepage"
-            ), BottomNavItem(
-                label = "Notifikasi", icon = Icons.Default.AddAlert, route = ""
-            ), BottomNavItem(
-                label = "History", icon = Icons.Default.AccessTimeFilled, route = ""
+        NavigationBar {
+            val bottomNavigation = listOf(
+                BottomNavItem(
+                    label = "Home",
+                    icon = Icons.Default.Home,
+                    route = "homepage"
+                ),
+                BottomNavItem(
+                    label = "Notifikasi",
+                    icon = Icons.Default.AddAlert,
+                    route = ""
+                ),
+                BottomNavItem(
+                    label = "History",
+                    icon = Icons.Default.AccessTimeFilled,
+                    route = ""
+                ),
+                BottomNavItem(
+                    label = "Status",
+                    icon = Icons.Default.ContentPaste,
+                    route = "statuspage"
+                ),
             )
-        )
-        bottomNavigation.map {
-            NavigationBarItem(
-                selected = navController.currentDestination?.route == it.route,
-                onClick = { navController.navigate(it.route) },
-                icon = {
-                    Icon(
-                        imageVector = it.icon,
-                        contentDescription = it.label,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                },
-                label = { Text(text = it.label) },
-            )
+            bottomNavigation.map {
+                NavigationBarItem(
+                    selected = navController.currentDestination?.route == it.route,
+                    onClick = { navController.navigate(it.route) },
+                    icon = {
+                        Icon(
+                            imageVector = it.icon,
+                            contentDescription = it.label,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    },
+                    label = { Text(text = it.label) },
+                )
+            }
         }
     }
-}
 
-@Composable
-fun BottomNavigationAdmin(navController: NavController, context: Context = LocalContext.current) {
-
-
-    NavigationBar {
-        val bottomNavigation = listOf(
-            BottomNavItem(
-                label = "Home",
-                icon = Icons.Default.Home,
-                route = "homepage"
-            ),
-            BottomNavItem(
-                label = "Notifikasi",
-                icon = Icons.Default.AddAlert,
-                route = ""
-            ),
-            BottomNavItem(
-                label = "History",
-                icon = Icons.Default.AccessTimeFilled,
-                route = ""
-            ),
-            BottomNavItem(
-                label = "Status",
-                icon = Icons.Default.ContentPaste,
-                route = ""
-            ),
-        )
-        bottomNavigation.map {
-            NavigationBarItem(
-                selected = navController.currentDestination?.route == it.route,
-                onClick = { navController.navigate(it.route) },
-                icon = { Icon(imageVector = it.icon, contentDescription = it.label, tint = MaterialTheme.colorScheme.primary) },
-                label = {Text(text = it.label)},
-            )
-        }
-    }
-}
-data class BottomNavItem(val label: String, val icon: ImageVector, val route: String)
+    data class BottomNavItem(val label: String, val icon: ImageVector, val route: String)
