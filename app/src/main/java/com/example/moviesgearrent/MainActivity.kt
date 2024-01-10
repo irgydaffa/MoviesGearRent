@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTimeFilled
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddAlert
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
@@ -102,13 +103,9 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             var startDestination: String
-            val jwt = sharedPreferences.getString("jwt", "")
-            if (jwt.equals("")) {
-                startDestination = "login"
-            } else {
-//                startDestination = "StatusPage"
-                startDestination = "homepage"
-            }
+            var jwt = sharedPreferences.getString("jwt", "")
+            startDestination = "login"
+
             AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -155,7 +152,7 @@ class MainActivity : ComponentActivity() {
                                 id = it.arguments?.getString("id"),
                             )
                         }
-                        composable(route = "adduser") {
+                        composable(route = "addpage") {
                             Addpage(navController)
                         }
                         composable(
@@ -285,12 +282,13 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 )
             }
         }
-
     }
 }
 
 @Composable
-fun BottomNavigation(navController: NavController) {
+fun BottomNavigation(navController: NavController, context: Context = LocalContext.current) {
+
+
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
@@ -318,4 +316,41 @@ fun BottomNavigation(navController: NavController) {
     }
 }
 
+@Composable
+fun BottomNavigationAdmin(navController: NavController, context: Context = LocalContext.current) {
+
+
+    NavigationBar {
+        val bottomNavigation = listOf(
+            BottomNavItem(
+                label = "Home",
+                icon = Icons.Default.Home,
+                route = "homepage"
+            ),
+            BottomNavItem(
+                label = "Notifikasi",
+                icon = Icons.Default.AddAlert,
+                route = ""
+            ),
+            BottomNavItem(
+                label = "History",
+                icon = Icons.Default.AccessTimeFilled,
+                route = ""
+            ),
+            BottomNavItem(
+                label = "Status",
+                icon = Icons.Default.ContentPaste,
+                route = ""
+            ),
+        )
+        bottomNavigation.map {
+            NavigationBarItem(
+                selected = navController.currentDestination?.route == it.route,
+                onClick = { navController.navigate(it.route) },
+                icon = { Icon(imageVector = it.icon, contentDescription = it.label, tint = MaterialTheme.colorScheme.primary) },
+                label = {Text(text = it.label)},
+            )
+        }
+    }
+}
 data class BottomNavItem(val label: String, val icon: ImageVector, val route: String)
