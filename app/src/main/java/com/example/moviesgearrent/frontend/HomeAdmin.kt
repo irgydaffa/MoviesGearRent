@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 //import coil.compose.AsyncImage
 import com.example.moviesgearrent.BottomNavigation
+import com.example.moviesgearrent.BottomNavigationAdmin
 import com.example.moviesgearrent.PreferencesManager
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.respon.ApiRespon
@@ -89,7 +90,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HomeService::class.java)
-    val call = retrofit.getData("*",search.text, "createdAt:asc")
+    val call = retrofit.getDataAdmin("*",search.text, "createdAt:asc")
     call.enqueue(
         object : Callback<ApiRespon<List<ProdukRespon>>> {
             override fun onResponse(
@@ -140,7 +141,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
 
         bottomBar = {
             BottomAppBar {
-                BottomNavigation(navController)
+                BottomNavigationAdmin(navController)
             }
         },
         floatingActionButton = {
@@ -242,7 +243,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                                 )
                             )
                             Text(
-                                text = "Rp. "+ listProduk[index].attribute?.harga.toString(),
+                                text = "Rp. "+ listProduk[index].attribute?.harga.toString()+"/hari",
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight(600),
