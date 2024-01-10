@@ -108,7 +108,11 @@ class MainActivity : ComponentActivity() {
 
             var startDestination: String
             var jwt = sharedPreferences.getString("jwt", "")
-            startDestination = "login"
+            startDestination = if (jwt.equals("")) {
+                "login"
+            } else {
+                "addpage"
+            }
 
             AppTheme {
                 Surface(

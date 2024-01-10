@@ -94,7 +94,7 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White),
             onClick = {
-                val baseUrl = "http://10.217.17.11:1337/api/"
+                val baseUrl = "http://10.0.2.2:1337/api/"
                 val retrofit = Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -107,7 +107,6 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
                         password
                     )
                 )
-
                 call.enqueue(object : Callback<LoginRespon> {
                     override fun onResponse(
                         call: Call<LoginRespon>,
@@ -120,7 +119,7 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
                                 "Register Sukses",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            navController.navigate("Register")
+                            navController.navigate("login")
                         } else if (response.code() == 400) {
                             print(response.errorBody())
                             Toast.makeText(
@@ -138,8 +137,6 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
             }
         ) {
             Text("Register")
-
-
         }
     }
 }

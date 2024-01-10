@@ -62,6 +62,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 //import coil.compose.AsyncImage
 import com.example.moviesgearrent.BottomNavigation
 import com.example.moviesgearrent.BottomNavigationAdmin
@@ -179,7 +180,6 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
 
                 trailingIcon = {
                     IconButton(onClick = {
-                        // Handle the search action
                     }) {
                         Icon(
                             Icons.Default.Search,
@@ -214,7 +214,7 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                             .clip(RoundedCornerShape(15.dp))
                             .shadow(2.dp)
                             .padding(10.dp)
-                            .clickable(onClick = { navController.navigate("DetailAdmin/$id") })
+                            .clickable(onClick = { navController.navigate("DetailPage/$id") })
                     ) {
 
                         Column(
@@ -225,10 +225,9 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-//                            DisplayImageFromUrl(imageUrl = listProduk[index].attribute?.)
-
+                            println(listProduk[index].attribute?.foto_produk?.data!!.attributes.url+"ahahahhahhaha")
                             Image(
-                                painter = painterResource(id = R.drawable.ic_launcher_background),
+                                painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + listProduk[index].attribute?.foto_produk?.data!!.attributes.url),
                                 contentDescription = "Produk",
                                 modifier = Modifier
                                     .size(150.dp)
@@ -243,50 +242,86 @@ fun HomeAdmin(navController: NavController, context: Context = LocalContext.curr
                                 )
                             )
                             Text(
-                                text = "Rp. "+ listProduk[index].attribute?.harga.toString()+"/hari",
+                                text = "Rp. " + listProduk[index].attribute?.harga.toString(),
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight(600),
                                     color = Color.Black
                                 )
                             )
-
-
                         }
 
                     }
 
                 }
-
             }
-            listProduk.forEach { Produks ->
-                Log.d("Produk", Produks.attribute?.nama_produk.toString())
+
+
+//            LazyVerticalGrid(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(10.dp),
+//                columns = GridCells.Fixed(2),
+//                verticalArrangement = Arrangement.spacedBy(10.dp),
+//                horizontalArrangement = Arrangement.spacedBy(10.dp),
+//            ) {
+//                items(listProduk.size) { index ->
+//                    val id = listProduk[index].id
+////                    Box(
+////                        modifier = Modifier
+////                            .fillMaxWidth()
+////                            .clip(RoundedCornerShape(15.dp))
+////                            .shadow(2.dp)
+////                            .padding(10.dp)
+////                            .clickable(onClick = { navController.navigate("DetailPage/$id") })
+////                    ) {
+////
+////                        Column(
+////                            modifier = Modifier
+////                                .fillMaxSize()
+////                                .padding(10.dp)
+////                                .clickable { navController.navigate("detailadmin/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status) },
+////                            horizontalAlignment = Alignment.CenterHorizontally,
+////                            verticalArrangement = Arrangement.Center
+////                        ) {
+//                            println(listProduk[index].attribute?.foto_produk?.data!!.attributes.url+"ahahahhahhaha")
+////                            Image(
+////                                painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + listProduk[index].attribute?.foto_produk?.data!!.attributes.url),
+////                                contentDescription = "Produk",
+////                                modifier = Modifier
+////                                    .size(150.dp)
+////                                    .align(Alignment.CenterHorizontally)
+////                            )
+//                            println(listProduk[index].attribute?.nama_produk+"dkasdksadaghdgda")
+//                            println(listProduk[index].attribute?.harga.toString()+"dkasdksadaghdgda")
+////                            Text(
+////                                text = "listProduk[index].attribute?.nama_produk",
+////                                style = TextStyle(
+////                                    fontSize = 20.sp,
+////                                    fontWeight = FontWeight(600),
+////                                    color = MaterialTheme.colorScheme.primary
+////                                )
+////                            )
+////                            Text(
+////                                text = "Rp. " + listProduk[index].attribute?.harga.toString(),
+////                                style = TextStyle(
+////                                    fontSize = 20.sp,
+////                                    fontWeight = FontWeight(600),
+////                                    color = Color.Black
+////                                )
+////                            )
+////                        }
+//
+//                    }
+//
+//                }
 
             }
         }
 
     }
 
-}
 
-//@Composable
-//fun FilledButtonExample(onClick: () -> Unit) {
-//    Button(onClick = { onClick() }) {
-//        Text("Filled")
-//    }
-//}
-
-
-//    @Composable
-//    fun DisplayImageFromUrl(imageUrl: String) {
-//        val Url = "http://10.0.2.2:1337/api/" + imageUrl
-//        AsyncImage(
-//            model = Url,
-//            placeholder = painterResource(id = R.drawable.tokoimg),
-//            error = painterResource(id = R.drawable.ic_launcher_background),
-//            contentDescription = "Test"
-//        )
-//    }
 
 
 
