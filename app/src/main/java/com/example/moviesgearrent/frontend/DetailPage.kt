@@ -50,6 +50,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.moviesgearrent.R
+import org.json.JSONObject
+import java.lang.Exception
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -177,10 +179,20 @@ fun Detailpage(
                                 if (response.isSuccessful) {
                                     navController.navigate("HomePage")
                                 } else if (response.code() == 400) {
-                                    print("error login")
-                                    Toast.makeText(
-                                        context, "Username atau password salah", Toast.LENGTH_SHORT
-                                    ).show()
+                                    try {
+                                        val JObjError = JSONObject(response.errorBody()!!.string())
+                                        Toast.makeText(
+                                            context,
+                                            JObjError.getJSONObject("error").getString("message"),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }catch (e: Exception){
+                                        Toast.makeText(
+                                            context,
+                                            e.message,
+                                            Toast.LENGTH_LONG
+                                        )
+                                    }
                                 }
                             }
                             override fun onFailure(

@@ -61,6 +61,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 //import coil.compose.AsyncImage
 import com.example.moviesgearrent.BottomNavigation
 import com.example.moviesgearrent.PreferencesManager
@@ -96,7 +97,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 response: Response<ApiRespon<List<ProdukRespon>>>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("respond test", response.body().toString())
+                    val p = response.body()
                     listProduk.clear()
                     response.body()?.data!!.forEach { Produks ->
                         listProduk.add(Produks)
@@ -230,13 +231,13 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
+                            println(listProduk[index].attribute?.foto_produk?.data!!.attributes.url+"ahahahhahhaha")
                             Image(
-                                painter = painterResource(id = R.drawable.ic_launcher_background),
+                                painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + listProduk[index].attribute?.foto_produk?.data!!.attributes.url),
                                 contentDescription = "Produk",
                                 modifier = Modifier
                                     .size(150.dp)
                                     .align(Alignment.CenterHorizontally)
-                                    .background(Color.Gray) // Ganti dengan warna latar belakang sementara
                             )
                             Text(
                                 text = listProduk[index].attribute?.nama_produk.toString(),

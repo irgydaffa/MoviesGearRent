@@ -104,7 +104,11 @@ class MainActivity : ComponentActivity() {
 
             var startDestination: String
             var jwt = sharedPreferences.getString("jwt", "")
-            startDestination = "login"
+            startDestination = if (jwt.equals("")) {
+                "login"
+            } else {
+                "addpage"
+            }
 
             AppTheme {
                 Surface(
@@ -254,9 +258,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         if (response.isSuccessful) {
                             preferencesManager.saveData("jwt", response.body()?.jwt!!)
                             if (response.body()?.user?.roles!! == "user") {
-                                navController.navigate("Homepage")
+                                navController.navigate("homepage")
                             } else if (response.body()?.user?.roles!! == "admin") {
-                                navController.navigate("HomeAdmin")
+                                navController.navigate("homeadmin")
                             }
                         } else {
                             Toast.makeText(
