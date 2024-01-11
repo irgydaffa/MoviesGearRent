@@ -1,6 +1,5 @@
-package com.example.moviesgearrent.frontend.admin
+package com.example.moviesgearrent.frontend
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -16,16 +15,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -36,17 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.moviesgearrent.BottomNavigation
-import com.example.moviesgearrent.BottomNavigationAdmin
-import com.example.moviesgearrent.R
-import com.example.moviesgearrent.data.StatusData
-import com.example.moviesgearrent.data.StatusDataWrapper
+import com.example.moviesgearrent.data.ProdukDataWrapper
+import com.example.moviesgearrent.data.produk
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import com.example.moviesgearrent.service.HomeService
@@ -57,10 +50,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailAdmin(
+fun EditPage(
     navController: NavController,
     id: String?,
     nama: String?,
@@ -69,13 +61,12 @@ fun DetailAdmin(
     status: String?,
     newUrl: String?,
     context: Context = LocalContext.current
-) {
-    val listProduk = remember { mutableStateOf(ProdukRespon()) }
-    val id_produk = remember { mutableStateOf(id ?: "0") }
-    val nama_produk = remember { mutableStateOf(nama ?: "") }
-    val desc_produk = remember { mutableStateOf(desc ?: "") }
-    val status = remember { mutableStateOf(status ?: "") }
-    val harga = remember { mutableStateOf(harga ?: "") }
+    ) {
+    val id_produk = remember { mutableStateOf(id) }
+    val nama_produk = remember { mutableStateOf(nama) }
+    val desc_produk = remember { mutableStateOf(desc) }
+    val status_produk = remember { mutableStateOf(status) }
+    val harga_produk = remember { mutableStateOf(harga) }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
 
@@ -102,11 +93,6 @@ fun DetailAdmin(
                     titleContentColor = Color.White,
                 )
             )
-        },
-        bottomBar = {
-            BottomAppBar {
-                BottomNavigationAdmin(navController)
-            }
         }
 
 
@@ -149,91 +135,87 @@ fun DetailAdmin(
 
 
                 {
-                    Text(
-                        text = nama_produk.value,
-                        fontSize = 30.sp,
+                    TextField(
+                        value = nama_produk.value!!,
+                        onValueChange = { nama_produk.value = it },
                         modifier = Modifier
                             .padding(bottom = 10.dp, top = 10.dp)
                     )
 
-                    Text(
-                        text = "Rp. "+harga.value,
-                        fontSize = 30.sp,
+                    TextField(
+                        value = harga_produk.value!!,
+                        onValueChange = { harga_produk.value = it },
                         modifier = Modifier
                             .padding(bottom = 5.dp, top = 10.dp)
                     )
 
-                    Text(
-                        text = desc_produk.value,
-                        fontSize = 14.sp,
+                    TextField(
+                        value = desc_produk.value!!,
+                        onValueChange = { desc_produk.value = it },
                         modifier = Modifier
                             .padding(bottom = 10.dp, top = 15.dp)
                     )
+                    Button(onClick = {
+                        val retrofit = Retrofit.Builder()
+                            .baseUrl(baseUrl)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build()
+                            .create(HomeService::class.java)
+                        val produk = produk(
+                            nama_produk.value!!,
+                            desc_produk.value!!,
+                            harga_produk.value!!,
+                        )
+                        val call = retrofit.updateProduk(id_produk.value!!, ProdukDataWrapper(produk))
+                        call.enqueue(
+                            object : Callback<ApiRespon<ProdukRespon>>{
+                                override fun onResponse(
+                                    call: Call<ApiRespon<ProdukRespon>>,
+                                    response: Response<ApiRespon<ProdukRespon>>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        navController.navigate("homeadmin")
+                                    }
+                                    else {
+                                        try {
+                                            val jObjError =
+                                                JSONObject(response.errorBody()!!.string())
+                                            Toast.makeText(
+                                                context,
+                                                jObjError.getJSONObject("error")
+                                                    .getString("message"),
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        } catch (e: Exception) {
+                                            Toast.makeText(
+                                                context,
+                                                e.message,
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+                                }
 
-                }
-            }
-            Row(modifier = Modifier.fillMaxWidth()){
-                Button(onClick = {
-                    val retrofit = Retrofit.Builder()
-                        .baseUrl(baseUrl)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build()
-                        .create(HomeService::class.java)
-                    val call = retrofit.deleteProduk(id_produk.value)
-                    call.enqueue(object : Callback<ApiRespon<ProdukRespon>> {
-                        override fun onResponse(
-                            call: Call<ApiRespon<ProdukRespon>>,
-                            response: Response<ApiRespon<ProdukRespon>>
-                        ) {
-                            if (response.isSuccessful) {
-                                Toast.makeText(
-                                    context,
-                                    "Berhasil Menghapus Produk",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                navController.navigate("homeadmin")
-                            } else {
-                                try {
+                                override fun onFailure(
+                                    call: Call<ApiRespon<ProdukRespon>>,
+                                    t: Throwable
+                                ) {
                                     Toast.makeText(
                                         context,
-                                        response.errorBody()!!.string(),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                } catch (e: Exception) {
-                                    Toast.makeText(
-                                        context,
-                                        e.message,
-                                        Toast.LENGTH_LONG
+                                        "Gagal Mengupdate Produk",
+                                        Toast.LENGTH_SHORT
                                     ).show()
                                 }
+
                             }
-                        }
-
-                        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
-                            Toast.makeText(
-                                context,
-                                "Gagal Menghapus Produk",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    })
-                },
-                    modifier = Modifier
-                        .padding(top = 10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-
-                        ) {
-                    Icon(Icons.Default.Delete, contentDescription = null)
-                }
-                Button(onClick = {
-                    navController.navigate(
-                        "editpage/${id_produk.value}/${nama_produk.value}/${desc_produk.value}/${harga.value}/${status.value}/$newUrl"
-                    )
-                },
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .fillMaxWidth()) {
-                    Text(text = "Edit")
+                        )
+                    },
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = "Save")
+                    }
                 }
             }
         }

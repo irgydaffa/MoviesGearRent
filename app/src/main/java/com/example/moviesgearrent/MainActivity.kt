@@ -65,6 +65,7 @@ import com.example.moviesgearrent.frontend.customer.CreateUser
 import com.example.moviesgearrent.frontend.admin.DetailAdmin
 import com.example.moviesgearrent.frontend.customer.Detailpage
 import com.example.moviesgearrent.frontend.DipinjamPage
+import com.example.moviesgearrent.frontend.EditPage
 import com.example.moviesgearrent.frontend.HomeAdmin
 import com.example.moviesgearrent.frontend.customer.Homepage
 import com.example.moviesgearrent.frontend.SelesaiPage
@@ -185,6 +186,18 @@ class MainActivity : ComponentActivity() {
                             TersediaPage(
                                 navController,
                                 id = it.arguments?.getString("id"),
+                            )
+                        }
+                        composable(route = "editpage/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}/{newUrl}"){
+                            backStackEntry ->
+                            EditPage(
+                                navController,
+                                backStackEntry.arguments?.getString("produkId"),
+                                backStackEntry.arguments?.getString("nama_produk"),
+                                backStackEntry.arguments?.getString("desc_produk"),
+                                backStackEntry.arguments?.getString("harga"),
+                                backStackEntry.arguments?.getString("status"),
+                                backStackEntry.arguments?.getString("newUrl")
                             )
                         }
                     }
@@ -352,7 +365,7 @@ class MainActivity : ComponentActivity() {
                 BottomNavItem(
                     label = "Home",
                     icon = Icons.Default.Home,
-                    route = "homepage"
+                    route = "homeadmin"
                 ),
                 BottomNavItem(
                     label = "Notifikasi",

@@ -205,7 +205,10 @@ fun Detailpage(
                             }
                         }
                     )
-                }
+                },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
                 ) {
                     Text("Sewa")
                 }

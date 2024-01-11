@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.md_theme_dark_onPrimary
 import com.example.compose.md_theme_dark_primary
+import com.example.moviesgearrent.BottomNavigationAdmin
 import com.example.moviesgearrent.data.StatusData
 import com.example.moviesgearrent.data.StatusDataWrapper
 import com.example.moviesgearrent.respon.ApiRespon
@@ -98,7 +100,7 @@ fun TersediaPage(navController: NavController, id: String?, context: Context = L
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { navController.navigate("homepage") }) {
+                        IconButton(onClick = { navController.navigate("homeadmin") }) {
                             Icon(
                                 Icons.Default.ArrowBack,
                                 contentDescription = null,
@@ -114,6 +116,11 @@ fun TersediaPage(navController: NavController, id: String?, context: Context = L
                     titleContentColor = Color.White,
                 )
             )
+        },
+        bottomBar = {
+            BottomAppBar {
+                BottomNavigationAdmin(navController)
+            }
         }
 
 
@@ -134,7 +141,7 @@ fun TersediaPage(navController: NavController, id: String?, context: Context = L
                         .drawBehind {
                             val borderSize = 6.dp.toPx()
                             drawLine(
-                                color = md_theme_dark_onPrimary,
+                                color = md_theme_dark_primary,
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
                                 strokeWidth = borderSize
@@ -166,6 +173,25 @@ fun TersediaPage(navController: NavController, id: String?, context: Context = L
                 ) {
                     Text(text = "Disewa")
                 }
+//                Column(
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .drawBehind {
+//                            val borderSize = 4.dp.toPx()
+//                            drawLine(
+//                                color = md_theme_dark_onPrimary,
+//                                start = Offset(x = 0f, y = size.height),
+//                                end = Offset(x = size.width, y = size.height),
+//                                strokeWidth = borderSize
+//                            )
+//                        }
+//                        .clickable(onClick = {
+//                            navController.navigate("selesai")
+//                        }),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                ) {
+//                    Text(text = "Selesai")
+//                }
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -173,25 +199,6 @@ fun TersediaPage(navController: NavController, id: String?, context: Context = L
                             val borderSize = 4.dp.toPx()
                             drawLine(
                                 color = md_theme_dark_onPrimary,
-                                start = Offset(x = 0f, y = size.height),
-                                end = Offset(x = size.width, y = size.height),
-                                strokeWidth = borderSize
-                            )
-                        }
-                        .clickable(onClick = {
-                            navController.navigate("selesai")
-                        }),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(text = "Selesai")
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .drawBehind {
-                            val borderSize = 4.dp.toPx()
-                            drawLine(
-                                color = md_theme_dark_primary,
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
                                 strokeWidth = borderSize

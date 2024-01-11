@@ -273,7 +273,7 @@ fun Addpage(navController: NavController, context: Context = LocalContext.curren
                                             response12: Response<UploadResponseList>
                                         ) {
                                             if (response12.isSuccessful) {
-                                           navController.navigate("homepage")
+                                           navController.navigate("homeadmin")
                                                Toast.makeText(
                                                     context,
                                                     "Berhasil menambahkan produk",

@@ -3,10 +3,12 @@ package com.example.moviesgearrent.service
 import com.example.moviesgearrent.data.ProdukDataWrapper
 import com.example.moviesgearrent.data.StatusData
 import com.example.moviesgearrent.data.StatusDataWrapper
+import com.example.moviesgearrent.data.produk
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -47,6 +49,17 @@ interface HomeService {
 
     @POST("produks")
     fun addProduk(
+        @Body produk: ProdukDataWrapper
+    ): Call<ApiRespon<ProdukRespon>>
+
+    @DELETE("produks/{id}")
+    fun deleteProduk(
+        @Path("id") id: String
+    ): Call<ApiRespon<ProdukRespon>>
+
+    @PUT("produks/{id}")
+    fun updateProduk(
+        @Path("id") id: String,
         @Body produk: ProdukDataWrapper
     ): Call<ApiRespon<ProdukRespon>>
 }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,6 +49,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.md_theme_dark_onPrimary
 import com.example.compose.md_theme_dark_primary
+import com.example.moviesgearrent.BottomNavigation
+import com.example.moviesgearrent.BottomNavigationAdmin
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.data.StatusData
 import com.example.moviesgearrent.data.StatusDataWrapper
@@ -63,7 +66,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DipinjamPage(navController: NavController, id: String?, context: Context = LocalContext.current) {
+fun DipinjamPage(
+    navController: NavController,
+    id: String?,
+    context: Context = LocalContext.current
+) {
     val baseUrl = "http://10.0.2.2:1337/api/"
     val listProduk = remember { mutableStateListOf<ProdukRespon>() }
     val nama_produk = remember { mutableStateOf("") }
@@ -85,8 +92,8 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
                 response.body()?.data!!.forEach { Produks ->
                     listProduk.add(Produks)
                     Log.d("test", Produks.id.toString())
-                }}
-            else  {
+                }
+            } else {
                 print("error login")
                 Toast.makeText(
                     context, "Username atau password salah", Toast.LENGTH_SHORT
@@ -104,7 +111,7 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { navController.navigate("homepage") }) {
+                        IconButton(onClick = { navController.navigate("homeadmin") }) {
                             Icon(
                                 Icons.Default.ArrowBack,
                                 contentDescription = null,
@@ -120,6 +127,11 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
                     titleContentColor = Color.White,
                 )
             )
+        },
+        bottomBar = {
+            BottomAppBar {
+                BottomNavigationAdmin(navController)
+            }
         }
 
 
@@ -140,7 +152,7 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
                         .drawBehind {
                             val borderSize = 4.dp.toPx()
                             drawLine(
-                                color = md_theme_dark_onPrimary,
+                                color = md_theme_dark_primary,
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
                                 strokeWidth = borderSize
@@ -159,7 +171,7 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
                         .drawBehind {
                             val borderSize = 4.dp.toPx()
                             drawLine(
-                                color = md_theme_dark_primary,
+                                color = md_theme_dark_onPrimary,
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
                                 strokeWidth = borderSize
@@ -172,25 +184,25 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
                 ) {
                     Text(text = "Disewa")
                 }
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .drawBehind {
-                            val borderSize = 4.dp.toPx()
-                            drawLine(
-                                color = md_theme_dark_onPrimary,
-                                start = Offset(x = 0f, y = size.height),
-                                end = Offset(x = size.width, y = size.height),
-                                strokeWidth = borderSize
-                            )
-                        }
-                        .clickable(onClick = {
-                            navController.navigate("selesai")
-                        }),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(text = "Selesai")
-                }
+//                Column(
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .drawBehind {
+//                            val borderSize = 4.dp.toPx()
+//                            drawLine(
+//                                color = md_theme_dark_onPrimary,
+//                                start = Offset(x = 0f, y = size.height),
+//                                end = Offset(x = size.width, y = size.height),
+//                                strokeWidth = borderSize
+//                            )
+//                        }
+//                        .clickable(onClick = {
+//                            navController.navigate("selesai")
+//                        }),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                ) {
+//                    Text(text = "Selesai")
+//                }
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -214,91 +226,105 @@ fun DipinjamPage(navController: NavController, id: String?, context: Context = L
             }
             listProduk.forEach {
                 Box {
-                    Column(
-                        Modifier
+                    Row(
+                        modifier = Modifier
                             .shadow(
                                 elevation = 5.5.dp,
                                 spotColor = Color(0x40000000),
                                 ambientColor = Color(0x40000000)
                             )
-                            .width(322.dp)
+                            .fillMaxWidth()
                             .height(90.dp)
                             .background(
                                 color = Color(0xFFFFFFFF),
                                 shape = RoundedCornerShape(size = 3.dp)
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        )
+                        {
+                            Text(
+                                text = it.attribute?.nama_produk.toString(),
+                                fontSize = 15.sp,
+                                modifier = Modifier
+                                    .padding(bottom = 10.dp, top = 10.dp)
                             )
-                            .clickable(onClick = {
-                                navController.navigate("statusdetail/${it.id}/${it.attribute?.nama_produk}/${it.attribute?.status}")
-                            }),
-                    )
-                    {
-                        Text(
-                            text = it.attribute?.nama_produk.toString(),
-                            fontSize = 15.sp,
-                            modifier = Modifier
-                                .padding(bottom = 10.dp, top = 10.dp)
-                        )
 
-                        Text(
-                            text = it.attribute?.harga.toString(),
-                            fontSize = 15.sp,
-                            modifier = Modifier
-                                .padding(bottom = 5.dp, top = 10.dp)
-                        )
+                            Text(
+                                text = it.attribute?.harga.toString(),
+                                fontSize = 15.sp,
+                                modifier = Modifier
+                                    .padding(bottom = 5.dp, top = 10.dp)
+                            )
 
-                        Text(
-                            text = it.attribute?.status.toString(),
-                            fontSize = 14.sp,
-                            modifier = Modifier
-                                .padding(bottom = 10.dp, top = 15.dp)
-                        )
+                            Text(
+                                text = it.attribute?.status.toString(),
+                                fontSize = 14.sp,
+                                modifier = Modifier
+                                    .padding(bottom = 10.dp, top = 15.dp)
+                            )
+                        }
+                        Button(onClick = {
+                            val retrofit2 = Retrofit.Builder()
+                                .baseUrl(baseUrl)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build()
+                                .create(HomeService::class.java)
+                            val call2 = retrofit2.UpdateStatus(
+                                it.id.toString(),
+                                StatusDataWrapper(StatusData("tersedia"))
+                            )
+                            call2.enqueue(
+                                object : Callback<ApiRespon<ProdukRespon>> {
+                                    override fun onResponse(
+                                        call: Call<ApiRespon<ProdukRespon>>,
+                                        response: Response<ApiRespon<ProdukRespon>>
+                                    ) {
+
+                                        if (response.code() == 200) {
+                                            navController.navigate("statuspage")
+                                        } else if (response.code() == 400) {
+                                            try {
+                                                val jObjError =
+                                                    JSONObject(response.errorBody()!!.string())
+                                                Toast.makeText(
+                                                    context,
+                                                    jObjError.getJSONObject("error")
+                                                        .getString("message"),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            } catch (e: Exception) {
+                                                Toast.makeText(
+                                                    context,
+                                                    e.message,
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                    }
+
+                                    override fun onFailure(
+                                        call: Call<ApiRespon<ProdukRespon>>,
+                                        t: Throwable
+                                    ) {
+                                        print(t.message)
+                                    }
+                                }
+                            )
+                        }
+                        ) {
+                            Text("Ubah Status")
+                        }
+                    }
+                    listProduk.forEach { Produks ->
+                        Log.d("Produk", Produks.attribute?.nama_produk.toString())
                     }
                 }
-                Spacer(modifier = Modifier.padding(10.dp))
             }
         }
-
-        if(status.value.equals("disewa")) {
-            Button(onClick = {
-                val retrofit2 = Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(HomeService::class.java)
-                val call2 = retrofit2.UpdateStatus(id!!, StatusDataWrapper(StatusData(status.value)))
-                call2.enqueue(
-                    object : Callback<ApiRespon<ProdukRespon>> {
-                        override fun onResponse(
-                            call: Call<ApiRespon<ProdukRespon>>,
-                            response: Response<ApiRespon<ProdukRespon>>
-                        ) {
-
-                            if (response.code() == 200) {
-                                navController.navigate("statuspage")
-                            } else if (response.code() == 400) {
-                                print("error login")
-                                Toast.makeText(
-                                    context, "Username atau password salah", Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-
-
-                        override fun onFailure(call: Call<ApiRespon<ProdukRespon>>, t: Throwable) {
-                            print(t.message)
-                        }
-                    }
-                )
-
-            }
-            ) {
-                Text("Ubah Status")
-            }
-        } else if(status.value.equals("pending")) {
-            Text(text = "Menunggu konfirmasi")
-        }
-    }
-    listProduk.forEach { Produks ->
-        Log.d("Produk", Produks.attribute?.nama_produk.toString())
     }
 }

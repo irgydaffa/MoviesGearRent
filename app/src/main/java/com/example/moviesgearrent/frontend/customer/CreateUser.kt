@@ -102,7 +102,8 @@ fun CreateUser(navController: NavController, context: Context = LocalContext.cur
                     RegisterData(
                         email,
                         username,
-                        password
+                        password,
+                        "user"
                     )
                 )
                 call.enqueue(object : Callback<LoginRespon> {
