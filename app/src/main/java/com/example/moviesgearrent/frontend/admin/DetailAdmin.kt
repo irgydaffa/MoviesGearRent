@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.moviesgearrent.R
 import com.example.moviesgearrent.data.StatusData
 import com.example.moviesgearrent.data.StatusDataWrapper
@@ -60,6 +61,7 @@ fun DetailAdmin(
     desc: String?,
     harga: String?,
     status: String?,
+    newUrl: String?,
     context: Context = LocalContext.current
 ) {
     val listProduk = remember { mutableStateOf(ProdukRespon()) }
@@ -106,9 +108,11 @@ fun DetailAdmin(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box {
+                val currentValue = newUrl ?: ""
+                val editUrl = currentValue.replace("::uploads::", "/uploads/")
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = null,
+                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + editUrl),
+                    contentDescription = "Produk",
                     alignment = Alignment.Center,
                     modifier = Modifier
                         .height(300.dp)
@@ -190,7 +194,9 @@ fun DetailAdmin(
                             }
                         }
                     )
-                }
+                },
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     Text("Sewa")
                 }

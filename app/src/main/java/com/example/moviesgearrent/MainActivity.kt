@@ -111,34 +111,37 @@ class MainActivity : ComponentActivity() {
                         composable(route = "homeadmin") {
                             HomeAdmin(navController)
                         }
-                        composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
+                        composable("detailpage/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}/{newUrl}") { backStackEntry ->
                             Detailpage(
                                 navController,
                                 backStackEntry.arguments?.getString("produkId"),
                                 backStackEntry.arguments?.getString("nama_produk"),
                                 backStackEntry.arguments?.getString("desc_produk"),
                                 backStackEntry.arguments?.getString("harga"),
-                                backStackEntry.arguments?.getString("status")
+                                backStackEntry.arguments?.getString("status"),
+                                backStackEntry.arguments?.getString("newUrl")
                             )
                         }
-                        composable("EditUser/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
-                            Detailpage(
-                                navController,
-                                backStackEntry.arguments?.getString("produkId"),
-                                backStackEntry.arguments?.getString("nama_produk"),
-                                backStackEntry.arguments?.getString("desc_produk"),
-                                backStackEntry.arguments?.getString("harga"),
-                                backStackEntry.arguments?.getString("status")
-                            )
-                        }
-                        composable("detailadmin/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
+//                        composable("EditUser/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}") { backStackEntry ->
+//                            Edituser(
+//                                navController,
+//                                backStackEntry.arguments?.getString("produkId"),
+//                                backStackEntry.arguments?.getString("nama_produk"),
+//                                backStackEntry.arguments?.getString("desc_produk"),
+//                                backStackEntry.arguments?.getString("harga"),
+//                                backStackEntry.arguments?.getString("status")
+//
+//                            )
+//                        }
+                        composable("detailadmin/{produkId}/{nama_produk}/{desc_produk}/{harga}/{status}/{newUrl}") { backStackEntry ->
                             DetailAdmin(
                                 navController,
                                 backStackEntry.arguments?.getString("produkId"),
                                 backStackEntry.arguments?.getString("nama_produk"),
                                 backStackEntry.arguments?.getString("desc_produk"),
                                 backStackEntry.arguments?.getString("harga"),
-                                backStackEntry.arguments?.getString("status")
+                                backStackEntry.arguments?.getString("status"),
+                                backStackEntry.arguments?.getString("newUrl")
                             )
                         }
                         composable(route = "createuser") {

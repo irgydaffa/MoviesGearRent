@@ -210,16 +210,18 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                 .padding(10.dp)
                                 .clickable(onClick = { navController.navigate("DetailPage/$id") })
                         ) {
-
+                            val currentValue = listProduk[index].attribute?.foto_produk?.data?.attributes?.url
+                            val newUrl = currentValue?.replace("/uploads/", "::uploads::")
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(10.dp)
-                                    .clickable { navController.navigate("detailpage/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status) },
+                                    .clickable { navController.navigate("detailpage/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status +"/" + newUrl) },
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 //                            println(listProduk[index].attribute?.foto_produk?.data!!.attributes.url+"ahahahhahhaha")
+
                                 Image(
                                     painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + listProduk[index].attribute?.foto_produk?.data?.attributes?.url),
                                     contentDescription = "Produk",
@@ -236,7 +238,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                                     )
                                 )
                                 Text(
-                                    text = "Rp. " + listProduk[index].attribute?.harga.toString(),
+                                    text = "Rp. " + listProduk[index].attribute?.harga.toString() + "/Hari",
                                     style = TextStyle(
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight(600),
