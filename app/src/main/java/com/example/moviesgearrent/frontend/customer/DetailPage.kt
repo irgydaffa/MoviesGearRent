@@ -1,4 +1,4 @@
-package com.example.moviesgearrent.frontend
+package com.example.moviesgearrent.frontend.customer
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import com.example.moviesgearrent.data.StatusDataWrapper
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -38,9 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moviesgearrent.R
 import com.example.moviesgearrent.data.StatusData
-import com.example.moviesgearrent.data.StatusDataWrapper
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import com.example.moviesgearrent.service.HomeService
@@ -49,11 +48,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.moviesgearrent.R
+import org.json.JSONObject
+import java.lang.Exception
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailAdmin(
+fun Detailpage(
     navController: NavController,
     id: String?,
     nama: String?,
@@ -176,10 +178,20 @@ fun DetailAdmin(
                                 if (response.isSuccessful) {
                                     navController.navigate("HomePage")
                                 } else if (response.code() == 400) {
-                                    print("error login")
-                                    Toast.makeText(
-                                        context, "Username atau password salah", Toast.LENGTH_SHORT
-                                    ).show()
+                                    try {
+                                        val JObjError = JSONObject(response.errorBody()!!.string())
+                                        Toast.makeText(
+                                            context,
+                                            JObjError.getJSONObject("error").getString("message"),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }catch (e: Exception){
+                                        Toast.makeText(
+                                            context,
+                                            e.message,
+                                            Toast.LENGTH_LONG
+                                        )
+                                    }
                                 }
                             }
                             override fun onFailure(

@@ -1,34 +1,23 @@
-package com.example.moviesgearrent.frontend
+package com.example.moviesgearrent.frontend.customer
 
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,9 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.colorspace.WhitePoint
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -65,7 +52,6 @@ import coil.compose.rememberAsyncImagePainter
 //import coil.compose.AsyncImage
 import com.example.moviesgearrent.BottomNavigation
 import com.example.moviesgearrent.PreferencesManager
-import com.example.moviesgearrent.R
 import com.example.moviesgearrent.respon.ApiRespon
 import com.example.moviesgearrent.respon.ProdukRespon
 import com.example.moviesgearrent.service.HomeService
@@ -181,7 +167,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 shape = RoundedCornerShape(30.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 30.dp),
+                    .padding(30.dp),
 
                 trailingIcon = {
                     IconButton(onClick = {
@@ -212,54 +198,57 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(listProduk.size) { index ->
-                    val id = listProduk[index].id
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(15.dp))
-                            .shadow(2.dp)
-                            .padding(10.dp)
-                            .clickable(onClick = { navController.navigate("DetailPage/$id") })
-                    ) {
 
-                        Column(
+                if(listProduk.isNotEmpty()) {
+                    items(listProduk.size) { index ->
+                        val id = listProduk[index].id
+                        Box(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(15.dp))
+                                .shadow(2.dp)
                                 .padding(10.dp)
-                                .clickable { navController.navigate("detailpage/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status) },
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                                .clickable(onClick = { navController.navigate("DetailPage/$id") })
                         ) {
-                            println(listProduk[index].attribute?.foto_produk?.data!!.attributes.url+"ahahahhahhaha")
-                            Image(
-                                painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + listProduk[index].attribute?.foto_produk?.data!!.attributes.url),
-                                contentDescription = "Produk",
+
+                            Column(
                                 modifier = Modifier
-                                    .size(150.dp)
-                                    .align(Alignment.CenterHorizontally)
-                            )
-                            Text(
-                                text = listProduk[index].attribute?.nama_produk.toString(),
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = MaterialTheme.colorScheme.primary
+                                    .fillMaxSize()
+                                    .padding(10.dp)
+                                    .clickable { navController.navigate("detailpage/" + listProduk[index].id + "/" + listProduk[index].attribute?.nama_produk + "/" + listProduk[index].attribute?.desc_produk + "/" + listProduk[index].attribute?.harga + "/" + listProduk[index].attribute?.status) },
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                //                            println(listProduk[index].attribute?.foto_produk?.data!!.attributes.url+"ahahahhahhaha")
+                                Image(
+                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + listProduk[index].attribute?.foto_produk?.data?.attributes?.url),
+                                    contentDescription = "Produk",
+                                    modifier = Modifier
+                                        .size(150.dp)
+                                        .align(Alignment.CenterHorizontally)
                                 )
-                            )
-                            Text(
-                                text = "Rp. " + listProduk[index].attribute?.harga.toString(),
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = Color.Black
+                                Text(
+                                    text = listProduk[index].attribute?.nama_produk.toString(),
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight(600),
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
                                 )
-                            )
+                                Text(
+                                    text = "Rp. " + listProduk[index].attribute?.harga.toString(),
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight(600),
+                                        color = Color.Black
+                                    )
+                                )
+                            }
+
                         }
 
                     }
-
-                    }
+                }
 
                 }
                 listProduk.forEach { Produks ->

@@ -106,7 +106,8 @@ fun SelesaiPage(navController: NavController, id: String?, context: Context = Lo
                         }
                         Text(
                             text = "Status Page", fontWeight = FontWeight.Medium, fontSize = 25.sp,
-                        )
+
+                            )
                     }
                 }, colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,

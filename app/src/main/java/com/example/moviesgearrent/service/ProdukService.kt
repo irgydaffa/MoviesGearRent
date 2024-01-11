@@ -1,5 +1,6 @@
 package com.example.moviesgearrent.service
 
+import com.example.moviesgearrent.data.ProdukDataWrapper
 import com.example.moviesgearrent.respon.ApiResponse
 import com.example.moviesgearrent.respon.ProdukRespon
 import com.google.gson.annotations.SerializedName

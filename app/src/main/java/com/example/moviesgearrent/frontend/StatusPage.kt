@@ -309,10 +309,10 @@ fun StatusPage(navController: NavController, id: String?, context: Context = Loc
                 ) {
                     Text("Ubah Status")
                 }
-            } else if(status.value.equals("disewa")) {
-                Text(text = "Sedang disewa")
-            } else if(status.value.equals("selesai")) {
-                Text(text = "Belum tersedia")
+            } else if (status.value == "disewa") {
+                Text(text = "Sedang disewa", modifier = Modifier.padding(16.dp))
+            } else if (status.value == "selesai") {
+                Text(text = "Belum tersedia", modifier = Modifier.padding(16.dp))
             }
         }
         listProduk.forEach { Produks ->

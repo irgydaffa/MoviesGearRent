@@ -132,7 +132,7 @@ fun TersediaPage(navController: NavController, id: String?, context: Context = L
                     modifier = Modifier
                         .weight(1f)
                         .drawBehind {
-                            val borderSize = 4.dp.toPx()
+                            val borderSize = 6.dp.toPx()
                             drawLine(
                                 color = md_theme_dark_onPrimary,
                                 start = Offset(x = 0f, y = size.height),

@@ -274,11 +274,11 @@ fun Addpage(navController: NavController, context: Context = LocalContext.curren
                                         ) {
                                             if (response12.isSuccessful) {
                                            navController.navigate("homepage")
-//                                                Toast.makeText(
-//                                                    context,
-//                                                    "Berhasil menambahkan produk",
-//                                                    Toast.LENGTH_SHORT
-//                                                ).show()
+                                               Toast.makeText(
+                                                    context,
+                                                    "Berhasil menambahkan produk",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             } else {
                                                 Toast.makeText(
                                                     context,
